@@ -10,6 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "server": "node server/index.js",
+    "server:watch": "nodemon server/index.js",
+    "dev:all": "concurrently \"npm run server:watch\" \"npm run dev\"",
     "migrate": "node server/migrations/migrate.js up",
     "migrate:rollback": "node server/migrations/migrate.js down",
     "seed": "node server/seeders/seed.js"
@@ -38,6 +40,8 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "concurrently": "^9.1.0",
+    "nodemon": "^3.1.9",
     "vite": "^7.2.4"
   }
 }

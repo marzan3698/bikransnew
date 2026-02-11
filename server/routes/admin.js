@@ -30,6 +30,8 @@ import {
   updateFooterNavItem,
   deleteFooterNavItem,
   reorderFooterNavItems,
+  getAdminBgVideo,
+  updateAdminBgVideo,
 } from '../controllers/themeController.js'
 import {
   listTasks,
@@ -127,6 +129,8 @@ router.post('/theme/footer', requireAdminOrManager, createFooterNavItem)
 router.put('/theme/footer/reorder', requireAdminOrManager, reorderFooterNavItems)
 router.put('/theme/footer/:id', requireAdminOrManager, updateFooterNavItem)
 router.delete('/theme/footer/:id', requireAdminOrManager, deleteFooterNavItem)
+router.get('/theme/admin-bg-video', requireAdminOrManager, getAdminBgVideo)
+router.put('/theme/admin-bg-video', requireAdminOrManager, updateAdminBgVideo)
 
 // Task management (admin)
 router.get('/tasks', requireAdminOrManager, listTasks)

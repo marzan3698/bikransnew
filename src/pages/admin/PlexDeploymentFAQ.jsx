@@ -7,6 +7,7 @@ function PlexDeploymentFAQ() {
   const [terminalWidgetOpen, setTerminalWidgetOpen] = useState(false)
   const [pm2NohupWidgetOpen, setPm2NohupWidgetOpen] = useState(false)
   const [githubPushPullWidgetOpen, setGithubPushPullWidgetOpen] = useState(false)
+  const [githubActionsWidgetOpen, setGithubActionsWidgetOpen] = useState(false)
 
   const toggle = (step) => setExpanded((p) => ({ ...p, [step]: !p[step] }))
 
@@ -184,6 +185,63 @@ function PlexDeploymentFAQ() {
             </div>
 
             <p><strong>সংক্ষেপে:</strong> Push → Pull → Build → (প্রয়োজন হলে) Restart</p>
+
+            <div className="plex-tip plex-deploy-tip" style={{ marginTop: '1rem' }}>
+              <span className="plex-tip-icon">📌</span>
+              <div>
+                <p className="plex-tip-title">পরবর্তী ধাপ</p>
+                <ol>
+                  <li>Plesk থেকে Pull করুন</li>
+                  <li>SSH এ <code>npm run build</code> চালান</li>
+                  <li>প্রয়োজনে <code>npx pm2 restart bikrans</code></li>
+                </ol>
+                <p>প্রথমে প্রজেক্ট ফোল্ডারে যান (যেকোনো একটি):</p>
+                <div className="plex-code-block">
+                  <code>cd ~/httpdocs</code>
+                  <code># অথবা</code>
+                  <code>cd /var/www/vhosts/bikrans.com/httpdocs</code>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="plex-widget plex-github-actions-widget">
+        <button
+          type="button"
+          className="plex-widget-toggle"
+          onClick={() => setGithubActionsWidgetOpen(!githubActionsWidgetOpen)}
+        >
+          <span className="plex-widget-icon">⚡</span>
+          <span className="plex-widget-title">GitHub Actions অটো ডেপ্লয়মেন্ট</span>
+          <span className={`plex-widget-chevron ${githubActionsWidgetOpen ? 'open' : ''}`}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points={githubActionsWidgetOpen ? '6 15 12 9 18 15' : '6 9 12 15 18 9'} />
+            </svg>
+          </span>
+        </button>
+        {githubActionsWidgetOpen && (
+          <div className="plex-widget-body">
+            <p><code>main</code> ব্রাঞ্চে push করলে GitHub Actions স্বয়ংক্রিয়ভাবে pull → build → restart করবে। একবার সেটআপ করলেই আর manually deploy করতে হবে না।</p>
+
+            <h4>সেটআপ (একবার)</h4>
+            <ol>
+              <li><strong>SSH কী:</strong> <code>ssh-keygen -t ed25519 -a 200 -C &quot;github-deploy&quot;</code></li>
+              <li><strong>সার্ভারে পাবলিক কী:</strong> <code>~/.ssh/authorized_keys</code> তে যোগ করুন</li>
+              <li><strong>GitHub Secrets:</strong> repo → Settings → Secrets → Actions</li>
+            </ol>
+
+            <h4>প্রয়োজনীয় Secrets</h4>
+            <div className="plex-code-block">
+              <code>DEPLOY_HOST = bikrans.com (বা সার্ভার IP)</code>
+              <code>DEPLOY_USER = SSH ইউজারনেম (Terminal-এ যে নাম দেখায়, যেমন bikr4470zg84)</code>
+              <code>DEPLOY_SSH_KEY = প্রাইভেট কী পুরো কনটেন্ট</code>
+              <code>DEPLOY_PATH = ~/httpdocs (বা /var/www/vhosts/bikrans.com/httpdocs)</code>
+              <code>DEPLOY_PORT = 22 (অপশনাল)</code>
+            </div>
+
+            <p>বিস্তারিত গাইড: প্রজেক্টে <code>GITHUB_ACTIONS_DEPLOY.md</code> ফাইল দেখুন।</p>
           </div>
         )}
       </div>

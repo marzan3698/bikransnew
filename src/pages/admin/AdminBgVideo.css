@@ -1,0 +1,115 @@
+/* Admin Background Video Styles */
+
+.admin-bg-video {
+  padding: 24px;
+}
+
+.admin-bg-video-form {
+  max-width: 800px;
+}
+
+.admin-bg-video .page-desc {
+  font-size: 14px;
+  color: #8b949e;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.admin-bg-video .form-section {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.admin-bg-video .form-section h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #c9d1d9;
+  margin: 0 0 20px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #30363d;
+}
+
+.admin-bg-video .form-group {
+  margin-bottom: 20px;
+}
+
+.admin-bg-video .form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #c9d1d9;
+  margin-bottom: 8px;
+}
+
+.admin-bg-video .form-group input[type="url"],
+.admin-bg-video .form-group input[type="text"] {
+  width: 100%;
+  padding: 8px 12px;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #c9d1d9;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.admin-bg-video .form-group input:focus {
+  outline: none;
+  border-color: #58a6ff;
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+}
+
+.admin-bg-video .form-group small {
+  display: block;
+  font-size: 12px;
+  color: #8b949e;
+  margin-top: 4px;
+}
+
+.video-preview-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  background: #0d1117;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.video-preview-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 6px;
+}
+
+.admin-bg-video .form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.admin-bg-video .btn-primary {
+  padding: 10px 20px;
+  background: #238636;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-bg-video .btn-primary:hover:not(:disabled) {
+  background: #2ea043;
+}
+
+.admin-bg-video .btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

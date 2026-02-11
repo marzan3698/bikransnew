@@ -17,6 +17,7 @@ import HeaderManagement from './pages/admin/HeaderManagement'
 import FooterManagement from './pages/admin/FooterManagement'
 import TaskManagement from './pages/admin/TaskManagement'
 import LandingPageManagement from './pages/admin/LandingPageManagement'
+import AdminBgVideo from './pages/admin/AdminBgVideo'
 import ProjectManagement from './pages/admin/ProjectManagement'
 import AdminPlaceholder from './pages/admin/AdminPlaceholder'
 import MusicAdd from './pages/admin/MusicAdd'
@@ -305,6 +306,7 @@ function App() {
       'theme-header': <HeaderManagement />,
       'theme-footer': <FooterManagement />,
       'theme-landing': <LandingPageManagement />,
+      'theme-admin-bg': <AdminBgVideo />,
       // ভিডিও এডিটর
       'music-add': <MusicAdd onTabChange={setAdminTab} />,
       'music-list': <MusicList onTabChange={setAdminTab} />,

@@ -7,7 +7,8 @@ function getToken() {
 }
 
 async function request(endpoint, options = {}) {
-  const url = `${API_BASE}${endpoint}`
+  const base = API_ORIGIN ? `${API_ORIGIN}${API_BASE}` : API_BASE
+  const url = `${base}${endpoint}`
   const headers = {
     'Content-Type': 'application/json',
     ...options.headers,
@@ -189,6 +190,11 @@ export const adminApi = {
   reorderFooterItems: (order) => request('/admin/theme/footer/reorder', {
     method: 'PUT',
     body: JSON.stringify({ order }),
+  }),
+  getAdminBgVideo: () => request('/admin/theme/admin-bg-video'),
+  updateAdminBgVideo: (data) => request('/admin/theme/admin-bg-video', {
+    method: 'PUT',
+    body: JSON.stringify(data),
   }),
 
   // Task management

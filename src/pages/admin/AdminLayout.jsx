@@ -1,10 +1,26 @@
 import { useState, useEffect } from 'react'
+import { adminApi } from '../../services/api'
 import './AdminLayout.css'
+
+const DEFAULT_ADMIN_BG_VIDEO_ID = 'mfoRx20c7Us'
 
 function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
   const [isDesktop, setIsDesktop] = useState(true)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [openDropdownId, setOpenDropdownId] = useState(null) // 'theme-design' | 'video-editor' | null
+  const [adminBgVideoId, setAdminBgVideoId] = useState(DEFAULT_ADMIN_BG_VIDEO_ID)
+
+  useEffect(() => {
+    const load = () => {
+      adminApi.getAdminBgVideo()
+        .then((data) => setAdminBgVideoId(data.admin_bg_video_id || DEFAULT_ADMIN_BG_VIDEO_ID))
+        .catch(() => {})
+    }
+    load()
+    const handler = () => load()
+    window.addEventListener('admin-bg-video-updated', handler)
+    return () => window.removeEventListener('admin-bg-video-updated', handler)
+  }, [])
 
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth >= 1024)
@@ -39,6 +55,7 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
         { id: 'theme-header', label: 'Header Management', icon: 'header' },
         { id: 'theme-footer', label: 'Footer Management', icon: 'footer' },
         { id: 'theme-landing', label: 'ল্যান্ডিং পেজ ডিজাইন', icon: 'landing' },
+        { id: 'theme-admin-bg', label: 'Admin Panel Background Video', icon: 'video' },
       ],
     },
     {
@@ -121,6 +138,12 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
           <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+        </svg>
+      ),
+      video: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <polygon points="23 7 16 12 23 17 23 7" />
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
         </svg>
       ),
       projects: (
@@ -325,7 +348,7 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
           <div className="admin-content-bg">
             <div className="admin-content-video-wrap">
               <iframe
-                src="https://www.youtube.com/embed/mfoRx20c7Us?autoplay=1&mute=1&loop=1&playlist=mfoRx20c7Us&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
+                src={`https://www.youtube.com/embed/${adminBgVideoId}?autoplay=1&mute=1&loop=1&playlist=${adminBgVideoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1`}
                 title="Background video"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

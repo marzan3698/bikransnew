@@ -333,3 +333,53 @@ export async function reorderFooterNavItems(req, res) {
     res.status(500).json({ error: 'Failed to reorder footer nav items' })
   }
 }
+
+// ===== ADMIN PANEL BACKGROUND VIDEO =====
+
+const DEFAULT_ADMIN_BG_VIDEO_ID = 'mfoRx20c7Us'
+
+function extractYouTubeVideoId(url) {
+  if (!url || typeof url !== 'string') return null
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s]+)/)
+  return match ? match[1] : null
+}
+
+export async function getAdminBgVideo(req, res) {
+  try {
+    const rows = await query('SELECT admin_bg_video_id FROM admin_panel_settings LIMIT 1')
+    const videoId = rows.length > 0 ? rows[0].admin_bg_video_id : null
+    res.json({
+      admin_bg_video_id: videoId || DEFAULT_ADMIN_BG_VIDEO_ID,
+      youtube_url: videoId ? `https://www.youtube.com/watch?v=${videoId}` : '',
+    })
+  } catch (err) {
+    console.error('Get admin bg video error:', err)
+    res.status(500).json({ error: 'Failed to get admin background video' })
+  }
+}
+
+export async function updateAdminBgVideo(req, res) {
+  try {
+    const { youtube_url, admin_bg_video_id } = req.body || {}
+    let videoId = admin_bg_video_id || extractYouTubeVideoId(youtube_url)
+    if (!videoId) {
+      return res.status(400).json({ error: 'Valid YouTube URL or video ID required' })
+    }
+    videoId = videoId.slice(0, 20)
+
+    const rows = await query('SELECT id FROM admin_panel_settings LIMIT 1')
+    if (rows.length === 0) {
+      await query('INSERT INTO admin_panel_settings (admin_bg_video_id) VALUES (?)', [videoId])
+    } else {
+      await query('UPDATE admin_panel_settings SET admin_bg_video_id = ? WHERE id = ?', [
+        videoId,
+        rows[0].id,
+      ])
+    }
+
+    res.json({ admin_bg_video_id: videoId })
+  } catch (err) {
+    console.error('Update admin bg video error:', err)
+    res.status(500).json({ error: 'Failed to update admin background video' })
+  }
+}
