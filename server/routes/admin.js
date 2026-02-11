@@ -58,9 +58,23 @@ import {
   getCtaSection,
   updateCtaSection,
 } from '../controllers/landingController.js'
+import {
+  getAdminAudioList,
+  createAudio,
+  getAudio,
+  updateAudio,
+  deleteAudio,
+} from '../controllers/musicController.js'
+import {
+  getAdminFrameList,
+  createFrame,
+  getFrame,
+  updateFrame,
+  deleteFrame,
+} from '../controllers/frameController.js'
 import { authMiddleware } from '../middleware/auth.js'
 import { requireAdmin, requireAdminOrManager } from '../middleware/roleCheck.js'
-import { uploadSlider, uploadLogo, uploadTaskAttachment, uploadLandingServiceIcon } from '../middleware/upload.js'
+import { uploadSlider, uploadLogo, uploadTaskAttachment, uploadLandingServiceIcon, uploadMusic, uploadFrame } from '../middleware/upload.js'
 
 const router = express.Router()
 
@@ -158,5 +172,42 @@ router.get('/projects', requireAdminOrManager, getProjects)
 router.post('/projects', requireAdminOrManager, createProject)
 router.put('/projects/:id', requireAdminOrManager, updateProject)
 router.delete('/projects/:id', requireAdminOrManager, deleteProject)
+
+// Audio / music management (video editor)
+router.get('/audio', requireAdminOrManager, getAdminAudioList)
+router.post('/audio', requireAdminOrManager, (req, res, next) => {
+  uploadMusic(req, res, (err) => {
+    if (err) return res.status(400).json({ error: err.message || 'Audio upload failed' })
+    next()
+  })
+}, createAudio)
+router.get('/audio/:id', requireAdminOrManager, getAudio)
+router.put('/audio/:id', requireAdminOrManager, (req, res, next) => {
+  uploadMusic(req, res, (err) => {
+    if (err) return res.status(400).json({ error: err.message || 'Audio upload failed' })
+    next()
+  })
+}, updateAudio)
+router.delete('/audio/:id', requireAdminOrManager, deleteAudio)
+
+// Frame management (video editor)
+router.get('/frames', requireAdminOrManager, getAdminFrameList)
+router.post('/frames', requireAdminOrManager, (req, res, next) => {
+  uploadFrame(req, res, (err) => {
+    if (err) {
+      const msg = err && typeof err.message === 'string' ? err.message : 'Frame upload failed'
+      return res.status(400).json({ error: msg })
+    }
+    next()
+  })
+}, createFrame)
+router.get('/frames/:id', requireAdminOrManager, getFrame)
+router.put('/frames/:id', requireAdminOrManager, (req, res, next) => {
+  uploadFrame(req, res, (err) => {
+    if (err) return res.status(400).json({ error: err.message || 'Frame upload failed' })
+    next()
+  })
+}, updateFrame)
+router.delete('/frames/:id', requireAdminOrManager, deleteFrame)
 
 export default router

@@ -29,9 +29,9 @@ Usually not required; Vite hot-reloads. Restart only if:
 
 ## After Implementing Backend Changes
 
-After adding or modifying API routes, controllers, or middleware, either:
+After adding or modifying API routes, controllers, or middleware:
 
-- Tell the user to restart the backend, or
-- Run the kill and start commands so the updated server is running.
+- **Always restart the backend yourself** by running the kill and start commands (do not ask the user to restart).
+- Use background execution so the server keeps running in the terminal.
 
 This avoids 404/400 errors caused by the old process not having the new routes or logic.

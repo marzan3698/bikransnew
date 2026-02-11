@@ -1,0 +1,9 @@
+.admin-placeholder {
+  padding: 24px 0;
+}
+
+.admin-placeholder-desc {
+  color: var(--text-secondary, #64748b);
+  font-size: 1rem;
+  margin-top: 8px;
+}

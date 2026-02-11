@@ -18,11 +18,18 @@ import FooterManagement from './pages/admin/FooterManagement'
 import TaskManagement from './pages/admin/TaskManagement'
 import LandingPageManagement from './pages/admin/LandingPageManagement'
 import ProjectManagement from './pages/admin/ProjectManagement'
+import AdminPlaceholder from './pages/admin/AdminPlaceholder'
+import MusicAdd from './pages/admin/MusicAdd'
+import MusicList from './pages/admin/MusicList'
+import FrameAdd from './pages/admin/FrameAdd'
+import FrameList from './pages/admin/FrameList'
+import InstantVideoEditor from './pages/InstantVideoEditor'
 
 function getInitialPage() {
   const path = window.location.pathname
   if (path === '/admin-panel') return 'admin-login'
   if (path === '/tiktok-campaign') return 'tiktok-campaign'
+  if (path === '/video-editor') return 'video-editor'
   if (path === '/user-profile') return 'login'
   return 'home'
 }
@@ -91,6 +98,8 @@ function App() {
         setCurrentPage(adminUser ? 'admin-panel' : 'admin-login')
       } else if (path === '/tiktok-campaign') {
         setCurrentPage('tiktok-campaign')
+      } else if (path === '/video-editor') {
+        setCurrentPage('video-editor')
       } else if (path === '/user-profile') {
         const statePage = e?.state?.page
         setCurrentPage(user ? (statePage === 'user-tasks' ? 'user-tasks' : 'dashboard') : 'login')
@@ -295,6 +304,13 @@ function App() {
       'theme-header': <HeaderManagement />,
       'theme-footer': <FooterManagement />,
       'theme-landing': <LandingPageManagement />,
+      // ভিডিও এডিটর
+      'music-add': <MusicAdd onTabChange={setAdminTab} />,
+      'music-list': <MusicList onTabChange={setAdminTab} />,
+      'frame-add': <FrameAdd onTabChange={setAdminTab} />,
+      'frame-list': <FrameList onTabChange={setAdminTab} />,
+      'user-monitor-used': <AdminPlaceholder title="যারা ব্যবহার করেছে" />,
+      'user-monitor-partial': <AdminPlaceholder title="যারা আংশিক ব্যবহার করেছে" />,
       settings: <Settings />,
     }
     return (
@@ -382,6 +398,21 @@ function App() {
         headerSettings={headerSettings}
         footerItems={footerItems}
         onNavigate={handleDashboardNavigate}
+      />
+    )
+  }
+
+  // Video Editor page
+  if (currentPage === 'video-editor') {
+    return (
+      <InstantVideoEditor
+        onBack={() => {
+          setCurrentPage('home')
+          window.history.pushState(null, '', '/')
+        }}
+        headerSettings={headerSettings}
+        footerItems={footerItems}
+        showFooter={headerSettings.show_footer}
       />
     )
   }
@@ -483,6 +514,20 @@ function App() {
             {isAutoPlaying ? '⏸' : '▶'}
           </button>
         </div>
+      </section>
+
+      <section className="video-editor-card">
+        <h3 className="video-editor-title">ইনস্ট্যান্ট ভিডিও এডিটর</h3>
+        <p className="video-editor-desc">অটোমেটিক ভিডিও সেটাপ</p>
+        <button
+          className="video-editor-btn"
+          onClick={() => {
+            setCurrentPage('video-editor')
+            window.history.pushState(null, '', '/video-editor')
+          }}
+        >
+          ফ্রি ভিডিও জেনারেট
+        </button>
       </section>
 
       <section className="services-section">

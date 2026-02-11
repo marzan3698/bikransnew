@@ -38,6 +38,28 @@ export const themeApi = {
 
 export const publicApi = {
   getProjects: () => request('/public/projects'),
+  getAudioTracks: () => request('/public/audio'),
+  logAudioPlay: (id, source = 'other') =>
+    request(`/public/audio/${id}/play`, {
+      method: 'POST',
+      body: JSON.stringify({ source }),
+    }),
+  getFrames: () => request('/public/frames'),
+  processVideo: async (videoFile, audioId, frameId) => {
+    const fd = new FormData()
+    fd.append('video', videoFile)
+    fd.append('audioId', String(audioId))
+    fd.append('frameId', String(frameId))
+    const res = await fetch(`${API_BASE}/public/video/process`, {
+      method: 'POST',
+      body: fd,
+    })
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}))
+      throw new Error(data.error || 'ভিডিও প্রসেস ব্যর্থ')
+    }
+    return res.blob()
+  },
 }
 
 export const landingApi = {
@@ -277,6 +299,74 @@ export const adminApi = {
     body: JSON.stringify(data),
   }),
   deleteProject: (id) => request(`/admin/projects/${id}`, { method: 'DELETE' }),
+
+  // Audio / music management
+  getAudioList: (params) => {
+    const q = new URLSearchParams(params || {}).toString()
+    return request(`/admin/audio${q ? '?' + q : ''}`)
+  },
+  createAudio: async (formData) => {
+    const token = getToken()
+    const headers = {}
+    if (token) headers['Authorization'] = `Bearer ${token}`
+    const res = await fetch(`${API_BASE}/admin/audio`, {
+      method: 'POST',
+      headers,
+      body: formData,
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data.error || 'Failed to upload audio')
+    return data
+  },
+  getAudio: (id) => request(`/admin/audio/${id}`),
+  updateAudio: async (id, formData) => {
+    const token = getToken()
+    const headers = {}
+    if (token) headers['Authorization'] = `Bearer ${token}`
+    const res = await fetch(`${API_BASE}/admin/audio/${id}`, {
+      method: 'PUT',
+      headers,
+      body: formData,
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data.error || 'Failed to update audio')
+    return data
+  },
+  deleteAudio: (id) => request(`/admin/audio/${id}`, { method: 'DELETE' }),
+
+  // Frame management
+  getFrameList: (params) => {
+    const q = new URLSearchParams(params || {}).toString()
+    return request(`/admin/frames${q ? '?' + q : ''}`)
+  },
+  createFrame: async (formData) => {
+    const token = getToken()
+    const headers = {}
+    if (token) headers['Authorization'] = `Bearer ${token}`
+    const res = await fetch(`${API_BASE}/admin/frames`, {
+      method: 'POST',
+      headers,
+      body: formData,
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data.error || 'Failed to upload frame')
+    return data
+  },
+  getFrame: (id) => request(`/admin/frames/${id}`),
+  updateFrame: async (id, formData) => {
+    const token = getToken()
+    const headers = {}
+    if (token) headers['Authorization'] = `Bearer ${token}`
+    const res = await fetch(`${API_BASE}/admin/frames/${id}`, {
+      method: 'PUT',
+      headers,
+      body: formData,
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data.error || 'Failed to update frame')
+    return data
+  },
+  deleteFrame: (id) => request(`/admin/frames/${id}`, { method: 'DELETE' }),
 }
 
 export const tasksApi = {

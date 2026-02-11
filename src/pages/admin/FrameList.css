@@ -1,0 +1,178 @@
+.frame-list .page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.frame-toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.frame-toolbar .toolbar-search {
+  flex: 1;
+  min-width: 180px;
+  padding: 8px 12px;
+  background: var(--sidebar-hover, #21262d);
+  border: 1px solid var(--border-color, #30363d);
+  border-radius: 6px;
+  color: var(--sidebar-text-hover, #c9d1d9);
+  font-size: 0.9rem;
+}
+
+.frame-toolbar .toolbar-select {
+  padding: 8px 12px;
+  background: var(--sidebar-hover, #21262d);
+  border: 1px solid var(--border-color, #30363d);
+  border-radius: 6px;
+  color: var(--sidebar-text-hover, #c9d1d9);
+  font-size: 0.9rem;
+  min-width: 120px;
+}
+
+.frame-table .cell-thumb {
+  width: 120px;
+}
+
+.frame-thumb {
+  width: 70px;
+  height: 125px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.row-actions .btn-sm {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  background: var(--sidebar-hover, #21262d);
+  border: 1px solid var(--border-color, #30363d);
+  color: var(--sidebar-text-hover, #c9d1d9);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.row-actions .btn-sm:hover {
+  background: var(--sidebar-active, #30363d);
+}
+
+.row-actions .btn-danger {
+  border-color: #f85149;
+  color: #f85149;
+}
+
+.row-actions .btn-danger:hover {
+  background: rgba(248, 81, 73, 0.15);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.pagination-info {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #8b949e);
+}
+
+.frame-list .modal {
+  background: var(--sidebar-bg, #1a2942);
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 420px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.frame-list .modal h2 {
+  margin: 0 0 16px;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.frame-list .modal .form-group {
+  margin-bottom: 12px;
+}
+
+.frame-list .modal .form-group label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--sidebar-text, #a3aed0);
+  font-size: 0.9rem;
+}
+
+.frame-list .modal input[type="text"],
+.frame-list .modal input[type="file"],
+.frame-list .modal select {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--sidebar-hover, #243553);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.frame-list .modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.frame-list .modal-actions button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.frame-list .modal-actions .btn-primary {
+  background: var(--sidebar-accent, #5d87ff);
+  color: #fff;
+  border: none;
+}
+
+.badge-active {
+  background: rgba(46, 160, 67, 0.2);
+  color: #3fb950;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.badge-inactive {
+  background: rgba(248, 81, 73, 0.2);
+  color: #f85149;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.empty-state {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-secondary, #8b949e);
+}
+
+.admin-loading,
+.admin-error {
+  padding: 24px;
+  text-align: center;
+}
+
+.admin-error {
+  color: #f85149;
+}
+

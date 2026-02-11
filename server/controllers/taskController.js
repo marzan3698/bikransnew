@@ -93,7 +93,7 @@ export async function createTask(req, res) {
 
     const result = await query(
       `INSERT INTO tasks (title, description, url, type, assigned_user_id, created_by, due_date, priority)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [title, description || null, taskUrl, type, assigned_user_id, req.userId, due, prio]
     )
     const taskId = result.insertId

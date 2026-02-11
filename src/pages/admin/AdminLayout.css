@@ -261,11 +261,30 @@
 }
 
 .nav-dropdown-list.open {
-  max-height: 200px;
+  max-height: 380px;
+  overflow-y: auto;
 }
 
 .nav-dropdown-list li {
   margin: 0;
+}
+
+.nav-section-header {
+  padding: 8px 16px 4px 38px;
+  margin-top: 6px;
+}
+
+.nav-section-header:first-child {
+  margin-top: 0;
+}
+
+.nav-section-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--sidebar-text);
+  opacity: 0.85;
 }
 
 .nav-item-child {

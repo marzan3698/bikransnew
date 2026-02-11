@@ -135,3 +135,102 @@ export const uploadLandingServiceIcon = multer({
   fileFilter: landingIconFilter,
   limits: { fileSize: LANDING_ICON_MAX_SIZE },
 }).single('icon')
+
+// Frame image upload for video editor (PNG/GIF, 1080x1920 validated in controller)
+const FRAME_UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads', 'frames')
+const FRAME_MAX_SIZE = 5 * 1024 * 1024 // 5MB
+const FRAME_ALLOWED_TYPES = ['image/png', 'image/gif', 'image/x-png']
+
+if (!fs.existsSync(FRAME_UPLOAD_DIR)) {
+  fs.mkdirSync(FRAME_UPLOAD_DIR, { recursive: true })
+}
+
+const frameStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, FRAME_UPLOAD_DIR),
+  filename: (req, file, cb) =>
+    cb(null, `temp_${Date.now()}${path.extname(file.originalname) || '.png'}`),
+})
+
+const frameFileFilter = (req, file, cb) => {
+  if (FRAME_ALLOWED_TYPES.includes(file.mimetype)) {
+    cb(null, true)
+  } else {
+    cb(new Error('Only PNG and GIF frames are allowed'), false)
+  }
+}
+
+export const uploadFrame = multer({
+  storage: frameStorage,
+  fileFilter: frameFileFilter,
+  limits: { fileSize: FRAME_MAX_SIZE },
+}).single('frame')
+
+// Music / audio upload for video editor
+const AUDIO_UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads', 'audio')
+const AUDIO_MAX_SIZE = 20 * 1024 * 1024 // 20MB
+const AUDIO_ALLOWED_TYPES = [
+  'audio/mpeg',
+  'audio/mp3',
+  'audio/wav',
+  'audio/webm',
+  'audio/ogg',
+  'audio/x-wav',
+]
+
+if (!fs.existsSync(AUDIO_UPLOAD_DIR)) {
+  fs.mkdirSync(AUDIO_UPLOAD_DIR, { recursive: true })
+}
+
+const audioStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, AUDIO_UPLOAD_DIR),
+  filename: (req, file, cb) =>
+    cb(null, `temp_${Date.now()}${path.extname(file.originalname) || '.mp3'}`),
+})
+
+const audioFileFilter = (req, file, cb) => {
+  if (AUDIO_ALLOWED_TYPES.includes(file.mimetype)) {
+    cb(null, true)
+  } else {
+    cb(new Error('Only MP3, WAV, WebM, OGG allowed'), false)
+  }
+}
+
+export const uploadMusic = multer({
+  storage: audioStorage,
+  fileFilter: audioFileFilter,
+  limits: { fileSize: AUDIO_MAX_SIZE },
+}).single('audio')
+
+// Video upload for instant video editor (temp processing, max 100MB)
+const VIDEO_TEMP_DIR = path.join(process.cwd(), 'public', 'uploads', 'temp', 'video')
+const VIDEO_MAX_SIZE = 100 * 1024 * 1024 // 100MB
+const VIDEO_ALLOWED_TYPES = [
+  'video/mp4',
+  'video/webm',
+  'video/quicktime',
+  'video/x-m4v',
+]
+
+if (!fs.existsSync(VIDEO_TEMP_DIR)) {
+  fs.mkdirSync(VIDEO_TEMP_DIR, { recursive: true })
+}
+
+const videoTempStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, VIDEO_TEMP_DIR),
+  filename: (req, file, cb) =>
+    cb(null, `process_${Date.now()}${path.extname(file.originalname) || '.mp4'}`),
+})
+
+const videoFileFilter = (req, file, cb) => {
+  if (VIDEO_ALLOWED_TYPES.includes(file.mimetype)) {
+    cb(null, true)
+  } else {
+    cb(new Error('Only MP4, WebM, MOV allowed'), false)
+  }
+}
+
+export const uploadVideo = multer({
+  storage: videoTempStorage,
+  fileFilter: videoFileFilter,
+  limits: { fileSize: VIDEO_MAX_SIZE },
+}).single('video')

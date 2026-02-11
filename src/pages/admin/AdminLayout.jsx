@@ -4,7 +4,7 @@ import './AdminLayout.css'
 function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
   const [isDesktop, setIsDesktop] = useState(true)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [themeOpen, setThemeOpen] = useState(false)
+  const [openDropdownId, setOpenDropdownId] = useState(null) // 'theme-design' | 'video-editor' | null
 
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth >= 1024)
@@ -39,6 +39,22 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
         { id: 'theme-header', label: 'Header Management', icon: 'header' },
         { id: 'theme-footer', label: 'Footer Management', icon: 'footer' },
         { id: 'theme-landing', label: 'ল্যান্ডিং পেজ ডিজাইন', icon: 'landing' },
+      ],
+    },
+    {
+      id: 'video-editor',
+      label: 'ভিডিও এডিটর',
+      icon: 'video-editor',
+      children: [
+        { id: 'video-editor-section-music', label: 'মিউজিক ম্যানেজমেন্ট', isSectionHeader: true },
+        { id: 'music-add', label: 'নতুন মিউজিক অ্যাড করুন', icon: 'music' },
+        { id: 'music-list', label: 'সকল মিউজিকের তালিকা', icon: 'list' },
+        { id: 'video-editor-section-frame', label: 'ফ্রেম ম্যানেজমেন্ট', isSectionHeader: true },
+        { id: 'frame-add', label: 'নতুন ফ্রেম অ্যাড করুন', icon: 'frame' },
+        { id: 'frame-list', label: 'ফ্রেম তালিকা', icon: 'list' },
+        { id: 'video-editor-section-monitor', label: 'ইউজার মনিটরিং', isSectionHeader: true },
+        { id: 'user-monitor-used', label: 'যারা ব্যবহার করেছে', icon: 'users' },
+        { id: 'user-monitor-partial', label: 'যারা আংশিক ব্যবহার করেছে', icon: 'users' },
       ],
     },
     { id: 'settings', label: 'Settings', icon: 'settings' },
@@ -111,6 +127,35 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
           <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
         </svg>
       ),
+      'video-editor': (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <polygon points="23 7 16 12 23 17 23 7" />
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+        </svg>
+      ),
+      music: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M9 18V5l12-2v13" />
+          <circle cx="6" cy="18" r="3" />
+          <circle cx="18" cy="16" r="3" />
+        </svg>
+      ),
+      frame: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <rect x="7" y="7" width="10" height="10" />
+        </svg>
+      ),
+      list: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <line x1="8" y1="6" x2="21" y2="6" />
+          <line x1="8" y1="12" x2="21" y2="12" />
+          <line x1="8" y1="18" x2="21" y2="18" />
+          <line x1="3" y1="6" x2="3.01" y2="6" />
+          <line x1="3" y1="12" x2="3.01" y2="12" />
+          <line x1="3" y1="18" x2="3.01" y2="18" />
+        </svg>
+      ),
       settings: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="12" cy="12" r="3" />
@@ -158,14 +203,14 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
           <ul className="sidebar-nav-list">
             {navItems.map((item) => {
               if (item.children) {
-                const hasActive = item.children.some((c) => c.id === activeTab)
-                const isOpen = (themeOpen || hasActive) && !sidebarCollapsed
+                const hasActive = item.children.some((c) => !c.isSectionHeader && c.id === activeTab)
+                const isOpen = (openDropdownId === item.id || hasActive) && !sidebarCollapsed
                 return (
                   <li key={item.id} className="nav-dropdown">
                     <button
                       type="button"
                       className={`nav-item nav-item-parent ${hasActive ? 'active' : ''}`}
-                      onClick={() => setThemeOpen(!themeOpen)}
+                      onClick={() => setOpenDropdownId(openDropdownId === item.id ? null : item.id)}
                     >
                       <span className="nav-icon">{renderIcon(item.icon)}</span>
                       {!sidebarCollapsed && (
@@ -180,18 +225,24 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
                       )}
                     </button>
                     <ul className={`nav-dropdown-list ${isOpen ? 'open' : ''}`}>
-                      {item.children.map((child) => (
-                        <li key={child.id}>
-                          <button
-                            type="button"
-                            className={`nav-item nav-item-child ${activeTab === child.id ? 'active' : ''}`}
-                            onClick={() => onTabChange(child.id)}
-                          >
-                            <span className="nav-icon">{renderIcon(child.icon)}</span>
-                            {!sidebarCollapsed && <span className="nav-label">{child.label}</span>}
-                          </button>
-                        </li>
-                      ))}
+                      {item.children.map((child) =>
+                        child.isSectionHeader ? (
+                          <li key={child.id} className="nav-section-header">
+                            {!sidebarCollapsed && <span className="nav-section-label">{child.label}</span>}
+                          </li>
+                        ) : (
+                          <li key={child.id}>
+                            <button
+                              type="button"
+                              className={`nav-item nav-item-child ${activeTab === child.id ? 'active' : ''}`}
+                              onClick={() => onTabChange(child.id)}
+                            >
+                              <span className="nav-icon">{renderIcon(child.icon)}</span>
+                              {!sidebarCollapsed && <span className="nav-label">{child.label}</span>}
+                            </button>
+                          </li>
+                        )
+                      )}
                     </ul>
                   </li>
                 )

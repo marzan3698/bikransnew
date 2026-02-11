@@ -237,6 +237,44 @@ body,
 }
 
 /* ========================================
+   VIDEO EDITOR CARD
+   ======================================== */
+.video-editor-card {
+  padding: 24px 16px;
+  margin: 0 16px 16px;
+  background: linear-gradient(135deg, #52B788 0%, #40916C 100%);
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(82, 183, 136, 0.3);
+}
+.video-editor-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.video-editor-desc {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 16px;
+}
+.video-editor-btn {
+  background: #fff;
+  color: #40916C;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.video-editor-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ========================================
    SERVICES SECTION
    ======================================== */
 .services-section {
