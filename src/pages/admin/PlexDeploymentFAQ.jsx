@@ -420,6 +420,31 @@ function PlexDeploymentFAQ() {
             </div>
           </div>
 
+          <h3>.htaccess দিয়ে Proxy সেটআপ</h3>
+          <p>Apache-কে Node.js অ্যাপে (port 3001) ফরওয়ার্ড করতে <code>httpdocs</code> ফোল্ডারে <code>.htaccess</code> ফাইল তৈরি বা এডিট করুন। Plesk File Manager → httpdocs → .htaccess (নেইলে Create) → এডিট করুন।</p>
+          <div className="plex-code-block">
+            <code># Proxy ALL requests to Node.js app (port 3001)</code>
+            <code>RewriteEngine On</code>
+            <code>RewriteRule ^(.*)$ http://127.0.0.1:3001/$1 [P,L]</code>
+          </div>
+          <p><strong>গুরুত্বপূর্ণ:</strong> শুধু এই তিন লাইন রাখুন। <code>RewriteCond</code> দিয়ে শর্ত দিলে Apache dev index.html সerve করবে—MIME type এরর হবে। সব রিকোয়েস্ট Node-এ যাওয়া জরুরি। <code>mod_proxy</code> চালু থাকতে হবে।</p>
+
+          <h3>SSH দিয়ে সরাসরি চালান (টেস্টিং)</h3>
+          <p>যদি ৫০৩ বা সাইট লোড না হয়, SSH Terminal এ গিয়ে অ্যাপ ম্যানুয়ালি চালিয়ে দেখা যাক ক্র্যাশ হচ্ছে কিনা:</p>
+          <div className="plex-code-block">
+            <code>cd ~/httpdocs</code>
+            <code>node server/index.js</code>
+          </div>
+          <p>যদি এরর আসে (যেমন module not found, database connection) তাহলে সেটা ঠিক করুন। চালু থাকলে <code>Server running on http://localhost:3001</code> দেখাবে। বন্ধ করতে Ctrl+C চাপুন।</p>
+
+          <h3>৫০৩ / MIME এরর এলে</h3>
+          <ul className="plex-numbered-list">
+            <li><strong>Restart App</strong> — Node.js ড্যাশবোর্ডে Restart App ক্লিক করুন।</li>
+            <li><strong>.htaccess চেক</strong> — উপরের তিন লাইন আছে কিনা, অন্য কিছু যোগ করা আছে কিনা।</li>
+            <li><strong>Node চালু আছে কিনা</strong> — Enable Node.js বাটনে স্ট্যাটাস দেখুন।</li>
+            <li><strong>mod_proxy</strong> — ৫০৩ হলে হোস্টিং সাপোর্টকে বলুন Apache <code>mod_proxy</code> চালু করতে।</li>
+          </ul>
+
           <div className="plex-action-row">
             <p>সব শেষে <strong>Restart App</strong> বাটনে ক্লিক করুন। তারপর bikrans.com এ গিয়ে সাইট চেক করুন।</p>
           </div>
