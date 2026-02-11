@@ -6,6 +6,7 @@ function PlexDeploymentFAQ() {
   const [jwtWidgetOpen, setJwtWidgetOpen] = useState(false)
   const [terminalWidgetOpen, setTerminalWidgetOpen] = useState(false)
   const [pm2NohupWidgetOpen, setPm2NohupWidgetOpen] = useState(false)
+  const [githubPushPullWidgetOpen, setGithubPushPullWidgetOpen] = useState(false)
 
   const toggle = (step) => setExpanded((p) => ({ ...p, [step]: !p[step] }))
 
@@ -62,6 +63,16 @@ function PlexDeploymentFAQ() {
               <code>npm run migrate</code>
             </div>
             <p>কিছু হোস্টে পাথ <code>/var/www/vhosts/bikrans.com/httpdocs</code> বা অনুরূপ হতে পারে। সাইটের ডকুমেন্ট রুট যেখানে, সেখানে যান।</p>
+
+            <h4>Plesk / সার্ভারে Migration ও Seed চালানোর সময় (শেষ ধাপ)</h4>
+            <p>SSH দিয়ে লগইন হয়ে নিচের কমান্ডগুলো ক্রমে চালান। প্রথমে migrate দিয়ে টেবিল তৈরি করুন, তারপর seed দিয়ে প্রথম admin ও user তৈরি করুন:</p>
+            <div className="plex-code-block">
+              <code>cd ~/httpdocs</code>
+              <code># অথবা: cd /var/www/vhosts/bikrans.com/httpdocs</code>
+              <code>npm run migrate</code>
+              <code>npm run seed</code>
+            </div>
+            <p>আপনি চাইলে <code>.env</code> ফাইলে DB credentials পরিবর্তন করে নিজের admin email/password দিয়ে <code>server/seeders/seed.js</code> এ যোগ করা যেতে পারে।</p>
           </div>
         )}
       </div>
@@ -124,6 +135,55 @@ function PlexDeploymentFAQ() {
                 <p>nohup দিয়ে চালালে সার্ভার রিবুটের পর manually আবার কমান্ড চালাতে হবে—অথবা Plesk Scheduled Task দিয়ে অটো চালান। PM2 + Scheduled Task হলে সবচেয়ে ভালো।</p>
               </div>
             </div>
+          </div>
+        )}
+      </div>
+
+      <div className="plex-widget plex-github-push-pull-widget">
+        <button
+          type="button"
+          className="plex-widget-toggle"
+          onClick={() => setGithubPushPullWidgetOpen(!githubPushPullWidgetOpen)}
+        >
+          <span className="plex-widget-icon">📤</span>
+          <span className="plex-widget-title">Github manual push and pull setup</span>
+          <span className={`plex-widget-chevron ${githubPushPullWidgetOpen ? 'open' : ''}`}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points={githubPushPullWidgetOpen ? '6 15 12 9 18 15' : '6 9 12 15 18 9'} />
+            </svg>
+          </span>
+        </button>
+        {githubPushPullWidgetOpen && (
+          <div className="plex-widget-body">
+            <p>কোড আপডেট করার পর সার্ভারে লেটেস্ট ভার্সন দেখাতে নিচের ধাপগুলো অনুসরণ করুন।</p>
+
+            <h4>১. লোকালে Push করুন</h4>
+            <p>আপনার কম্পিউটারে Terminal খুলে প্রজেক্ট ফোল্ডারে গিয়ে:</p>
+            <div className="plex-code-block">
+              <code>cd bikrans-homepage</code>
+              <code>git add .</code>
+              <code>git commit -m &quot;আপনার commit মেসেজ&quot;</code>
+              <code>git push origin main</code>
+            </div>
+
+            <h4>২. Plesk-এ Pull করুন</h4>
+            <p>Plesk প্যানেলে <strong>Websites &amp; Domains</strong> → bikrans.com → <strong>Git</strong> → <strong>Pull</strong> বাটনে ক্লিক করুন।</p>
+
+            <h4>৩. Build চালান (গুরুত্বপূর্ণ)</h4>
+            <p>Git pull শুধু সোর্স কোড আপডেট করে। লাইভ সাইট <code>dist/</code> ফোল্ডার থেকে serve হয়। তাই SSH দিয়ে:</p>
+            <div className="plex-code-block">
+              <code>cd ~/httpdocs</code>
+              <code># অথবা: cd /var/www/vhosts/bikrans.com/httpdocs</code>
+              <code>npm run build</code>
+            </div>
+
+            <h4>৪. (প্রয়োজন হলে) Node Restart</h4>
+            <p>কিছু ক্ষেত্রে পরিবর্তন দেখাতে Node অ্যাপ রিস্টার্ট করুন:</p>
+            <div className="plex-code-block">
+              <code>npx pm2 restart bikrans</code>
+            </div>
+
+            <p><strong>সংক্ষেপে:</strong> Push → Pull → Build → (প্রয়োজন হলে) Restart</p>
           </div>
         )}
       </div>
