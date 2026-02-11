@@ -2,9 +2,10 @@ import { useState } from 'react'
 import './PlexDeploymentFAQ.css'
 
 function PlexDeploymentFAQ() {
-  const [expanded, setExpanded] = useState({ step1: false, step2: false, step3: false, step4: false })
+  const [expanded, setExpanded] = useState({ step1: false, step2: false, step3: false, step4: false, step5: false })
   const [jwtWidgetOpen, setJwtWidgetOpen] = useState(false)
   const [terminalWidgetOpen, setTerminalWidgetOpen] = useState(false)
+  const [pm2NohupWidgetOpen, setPm2NohupWidgetOpen] = useState(false)
 
   const toggle = (step) => setExpanded((p) => ({ ...p, [step]: !p[step] }))
 
@@ -61,6 +62,68 @@ function PlexDeploymentFAQ() {
               <code>npm run migrate</code>
             </div>
             <p>কিছু হোস্টে পাথ <code>/var/www/vhosts/bikrans.com/httpdocs</code> বা অনুরূপ হতে পারে। সাইটের ডকুমেন্ট রুট যেখানে, সেখানে যান।</p>
+          </div>
+        )}
+      </div>
+
+      <div className="plex-widget plex-pm2-nohup-widget">
+        <button
+          type="button"
+          className="plex-widget-toggle"
+          onClick={() => setPm2NohupWidgetOpen(!pm2NohupWidgetOpen)}
+        >
+          <span className="plex-widget-icon">🔄</span>
+          <span className="plex-widget-title">PM2 না হলে nohup — বিস্তারিত ব্যবহার ও কমান্ড</span>
+          <span className={`plex-widget-chevron ${pm2NohupWidgetOpen ? 'open' : ''}`}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points={pm2NohupWidgetOpen ? '6 15 12 9 18 15' : '6 9 12 15 18 9'} />
+            </svg>
+          </span>
+        </button>
+        {pm2NohupWidgetOpen && (
+          <div className="plex-widget-body">
+            <h4>PM2 vs nohup — কখন কী ব্যবহার করবেন?</h4>
+            <p><strong>PM2</strong> হলো Node.js অ্যাপ চালু রাখার জন্য সবচেয়ে ভালো টুল। অটো রিস্টার্ট, লগ ম্যানেজমেন্ট, মাল্টিপল অ্যাপ চালানোর সুবিধা দেয়। তবে <code>npm install -g pm2</code> পারমিশন এরর (EACCES) দিলে অথবা <code>pm2 startup</code> যদি <code>sudo</code> চায়—তখন <strong>nohup</strong> দ্রুত বিকল্প।</p>
+            <p><strong>nohup</strong> হলো বিল্ট-ইন কমান্ড; কোনো ইনস্টল লাগে না। টার্মিনাল বন্ধ করলেও প্রক্রিয়া চালু থাকে। কিন্তু সার্ভার রিবুট হলে আবার চালাতে হবে; PM2-এর মতো অটো রিস্টার্ট নেই।</p>
+
+            <h4>PM2 প্রজেক্টে ইনস্টল (গ্লোবাল না)</h4>
+            <p>যদি <code>npm install -g pm2</code> কাজ না করে, প্রজেক্টে ইনস্টল করুন। <code>npx</code> দিয়ে চালান:</p>
+            <div className="plex-code-block">
+              <code>cd ~/httpdocs</code>
+              <code>npm install pm2</code>
+              <code>npx pm2 start server/index.js --name bikrans</code>
+              <code>npx pm2 save</code>
+              <code>npx pm2 startup</code>
+            </div>
+            <p><strong>pm2 startup</strong> এর পর যে কমান্ড দেখাবে সেটা রান করুন। <code>sudo</code> পারমিশন না থাকলে Ctrl+C দিয়ে বাতিল করুন—nohup বিকল্প নিন।</p>
+
+            <h4>nohup দিয়ে চালান (ইনস্টল ছাড়াই)</h4>
+            <p>কোনো এক্সটার্নাল প্যাকেজ ছাড়াই ব্যাকগ্রাউন্ডে অ্যাপ চালান। লগ <code>~/bikrans.log</code> এ সেভ হবে:</p>
+            <div className="plex-code-block">
+              <code>cd ~/httpdocs</code>
+              <code>nohup node server/index.js &gt; ~/bikrans.log 2&gt;&amp;1 &amp;</code>
+            </div>
+            <p><strong>ব্যাখ্যা:</strong> <code>nohup</code> = টার্মিনাল বন্ধ হলেও প্রক্রিয়া চলবে; <code>&gt; ~/bikrans.log</code> = আউটপুট লগ ফাইলে; <code>2&gt;&amp;1</code> = এররও একই ফাইলে; <code>&amp;</code> = ব্যাকগ্রাউন্ডে চালান।</p>
+
+            <h4>Plesk Scheduled Task / Cron-এ কী লিখবেন?</h4>
+            <p>Plesk-এর <strong>Schedule a Task</strong> → <strong>Run a command</strong> → <strong>Command</strong> ফিল্ডে এক লাইনে দিন:</p>
+            <p><strong>PM2 দিয়ে:</strong></p>
+            <div className="plex-code-block">
+              <code>cd /var/www/vhosts/bikrans.com/httpdocs &amp;&amp; npx pm2 start server/index.js --name bikrans --update-env 2&gt;/dev/null || true</code>
+            </div>
+            <p><strong>nohup দিয়ে:</strong></p>
+            <div className="plex-code-block">
+              <code>cd /var/www/vhosts/bikrans.com/httpdocs &amp;&amp; nohup node server/index.js &gt; ~/bikrans.log 2&gt;&amp;1 &amp;</code>
+            </div>
+            <p><strong>Schedule:</strong> প্রতিদিন ভোর (যেমন ০৪:০০) অথবা প্রতি ঘণ্টায় রাখুন। সার্ভার রিবুট হলে পরবর্তী রানে অ্যাপ আবার চালু হবে।</p>
+
+            <div className="plex-tip plex-tip-warning" style={{ marginTop: '1rem' }}>
+              <span className="plex-tip-icon">⚠️</span>
+              <div>
+                <p className="plex-tip-title">সতর্কতা</p>
+                <p>nohup দিয়ে চালালে সার্ভার রিবুটের পর manually আবার কমান্ড চালাতে হবে—অথবা Plesk Scheduled Task দিয়ে অটো চালান। PM2 + Scheduled Task হলে সবচেয়ে ভালো।</p>
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -437,6 +500,22 @@ function PlexDeploymentFAQ() {
           </div>
           <p>যদি এরর আসে (যেমন module not found, database connection) তাহলে সেটা ঠিক করুন। চালু থাকলে <code>Server running on http://localhost:3001</code> দেখাবে। বন্ধ করতে Ctrl+C চাপুন।</p>
 
+          <div className="plex-tip plex-tip-warning">
+            <span className="plex-tip-icon">⚠️</span>
+            <div>
+              <p className="plex-tip-title">টার্মিনাল বন্ধ করলে ৫০৩ আসে — কী করবেন?</p>
+              <p><code>node server/index.js</code> ফোরগ্রাউন্ডে চালালে টার্মিনাল বন্ধ হলে প্রক্রিয়া বন্ধ হয়ে যায়। অ্যাপ সবসময় চালু রাখতে <strong>PM2</strong> ব্যবহার করুন:</p>
+              <div className="plex-code-block">
+                <code>cd ~/httpdocs</code>
+                <code>npm install -g pm2</code>
+                <code>pm2 start server/index.js --name bikrans</code>
+                <code>pm2 save</code>
+                <code>pm2 startup</code>
+              </div>
+              <p><code>pm2 startup</code> এর পরে যে কমান্ড দেখাবে সেটা আবার রান করুন। তাহলে সার্ভার রিস্টার্টে অ্যাপ অটো চালু হবে। <code>pm2 status</code> দিয়ে চালু আছে কিনা দেখুন।</p>
+            </div>
+          </div>
+
           <h3>৫০৩ / MIME এরর এলে</h3>
           <ul className="plex-numbered-list">
             <li><strong>Restart App</strong> — Node.js ড্যাশবোর্ডে Restart App ক্লিক করুন।</li>
@@ -450,6 +529,62 @@ function PlexDeploymentFAQ() {
           </div>
 
           <p className="plex-tip-next">সেটআপ সম্পন্ন। এখন bikrans.com এ গিয়ে সাইট চেক করুন।</p>
+          </div>
+        </section>
+
+        {/* ধাপ ৫ - Node অ্যাপ চালু রাখা (PM2 / nohup / Scheduled Tasks) */}
+        <section className={`plex-step-card ${expanded.step5 ? 'expanded' : 'collapsed'}`}>
+          <button type="button" className="plex-step-header" onClick={() => toggle('step5')}>
+            <div className="plex-step-badge">ধাপ ৫</div>
+            <h2>Node অ্যাপ সবসময় চালু রাখা (PM2, nohup, Scheduled Tasks)</h2>
+            <span className="plex-chevron">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points={expanded.step5 ? '6 15 12 9 18 15' : '6 9 12 15 18 9'} />
+              </svg>
+            </span>
+          </button>
+          <div className="plex-step-body">
+
+          <p>টার্মিনাল বন্ধ করলে অ্যাপ বন্ধ হয়ে ৫০৩ আসলে নিচের ধাপগুলো অনুসরণ করুন।</p>
+
+          <h3>১. PM2 প্রজেক্টে ইনস্টল করুন (গ্লোবাল না)</h3>
+          <p><code>npm install -g pm2</code> পারমিশন এরর দিলে প্রজেক্টে ইনস্টল করুন:</p>
+          <div className="plex-code-block">
+            <code>cd ~/httpdocs</code>
+            <code>npm install pm2</code>
+            <code>npx pm2 start server/index.js --name bikrans</code>
+            <code>npx pm2 save</code>
+            <code>npx pm2 startup</code>
+          </div>
+          <p><strong>pm2 startup</strong> চালানোর পর যে কমান্ড দেখাবে সেটা রান করুন। যদি <code>sudo</code> চায় এবং পারমিশন না থাকে, তাহলে Ctrl+C দিয়ে বাতিল করুন—অ্যাপ ইতিমধ্যে চালু আছে। পরবর্তী ধাপ (nohup) বিকল্প হিসেবে ব্যবহার করুন।</p>
+
+          <h3>২. যদি PM2 কাজ না করে — nohup</h3>
+          <p>কোনো ইনস্টল ছাড়াই ব্যাকগ্রাউন্ডে চালান:</p>
+          <div className="plex-code-block">
+            <code>cd ~/httpdocs</code>
+            <code>nohup node server/index.js &gt; ~/bikrans.log 2&gt;&amp;1 &amp;</code>
+          </div>
+          <p>এর পর টার্মিনাল বন্ধ করলেও অ্যাপ চলতে থাকবে। ⚠️ <strong>সতর্কতা:</strong> সার্ভার রিবুট হলে আবার এই কমান্ড দিতে হবে।</p>
+
+          <h3>৩. Scheduled Tasks (সার্ভার রিবুটে অটো চালু)</h3>
+          <p>PM2-এর <code>pm2 startup</code> যদি sudo ছাড়া কাজ না করে, Plesk-এর <strong>Scheduled Tasks</strong> থেকে একটি ক্রন জব সেট করুন।</p>
+          <div className="plex-nav-guide">
+            <ol>
+              <li>Plesk → <strong>Scheduled Tasks</strong> (বা <strong>Tools &amp; Settings</strong> → <strong>Scheduled Tasks</strong>)</li>
+              <li><strong>Add Task</strong> ক্লিক করুন</li>
+              <li><strong>Run:</strong> <code>Custom</code> সিলেক্ট করুন</li>
+              <li><strong>Command:</strong> নিচের লাইন দিন (এক লাইনে):</li>
+            </ol>
+          </div>
+          <div className="plex-code-block">
+            <code>cd /var/www/vhosts/bikrans.com/httpdocs &amp;&amp; npx pm2 start server/index.js --name bikrans --update-env 2&gt;/dev/null || true</code>
+          </div>
+          <p>অথবা nohup ব্যবহার করলে:</p>
+          <div className="plex-code-block">
+            <code>cd /var/www/vhosts/bikrans.com/httpdocs &amp;&amp; nohup node server/index.js &gt; ~/bikrans.log 2&gt;&amp;1 &amp;</code>
+          </div>
+          <p><strong>Schedule:</strong> প্রতিদিন ভোর (যেমন ০৪:০০) অথবা প্রতি ঘণ্টায় চালান। তাহলে সার্ভার রিবুট হলে পরবর্তী রানেই অ্যাপ আবার চালু হবে।</p>
+
           </div>
         </section>
       </div>
