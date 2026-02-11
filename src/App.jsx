@@ -23,6 +23,7 @@ import MusicAdd from './pages/admin/MusicAdd'
 import MusicList from './pages/admin/MusicList'
 import FrameAdd from './pages/admin/FrameAdd'
 import FrameList from './pages/admin/FrameList'
+import PlexDeploymentFAQ from './pages/admin/PlexDeploymentFAQ'
 import InstantVideoEditor from './pages/InstantVideoEditor'
 
 function getInitialPage() {
@@ -311,6 +312,7 @@ function App() {
       'frame-list': <FrameList onTabChange={setAdminTab} />,
       'user-monitor-used': <AdminPlaceholder title="যারা ব্যবহার করেছে" />,
       'user-monitor-partial': <AdminPlaceholder title="যারা আংশিক ব্যবহার করেছে" />,
+      'plex-deployment': <PlexDeploymentFAQ />,
       settings: <Settings />,
     }
     return (

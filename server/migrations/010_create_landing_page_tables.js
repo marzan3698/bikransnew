@@ -1,6 +1,6 @@
 export async function up(conn) {
   await conn.query(`
-    CREATE TABLE landing_services_settings (
+    CREATE TABLE IF NOT EXISTS landing_services_settings (
       id INT PRIMARY KEY AUTO_INCREMENT,
       section_title VARCHAR(255) DEFAULT 'সব স্বাস্থ্য সমাধান এক প্ল্যাটফর্মে',
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -8,7 +8,7 @@ export async function up(conn) {
   `)
 
   await conn.query(`
-    CREATE TABLE landing_services (
+    CREATE TABLE IF NOT EXISTS landing_services (
       id INT PRIMARY KEY AUTO_INCREMENT,
       icon VARCHAR(500) NOT NULL,
       title VARCHAR(255) NOT NULL,
@@ -25,7 +25,7 @@ export async function up(conn) {
   `)
 
   await conn.query(`
-    CREATE TABLE landing_features_settings (
+    CREATE TABLE IF NOT EXISTS landing_features_settings (
       id INT PRIMARY KEY AUTO_INCREMENT,
       section_title VARCHAR(255) DEFAULT 'কেন বিক্রান্স বেছে নেবেন?',
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -33,7 +33,7 @@ export async function up(conn) {
   `)
 
   await conn.query(`
-    CREATE TABLE landing_features (
+    CREATE TABLE IF NOT EXISTS landing_features (
       id INT PRIMARY KEY AUTO_INCREMENT,
       icon VARCHAR(50) NOT NULL,
       title VARCHAR(255) NOT NULL,
@@ -48,13 +48,13 @@ export async function up(conn) {
   `)
 
   await conn.query(`
-    CREATE TABLE landing_cta (
+    CREATE TABLE IF NOT EXISTS landing_cta (
       id INT PRIMARY KEY AUTO_INCREMENT,
       heading VARCHAR(255) DEFAULT 'আজই শুরু করুন',
       subtitle VARCHAR(500) DEFAULT 'স্বাস্থ্য ও আয়ের নতুন যাত্রা',
-      primary_btn_text VARCHAR(100) DEFAULT '📞 কল করুন',
+      primary_btn_text VARCHAR(100) DEFAULT 'কল করুন',
       primary_btn_link VARCHAR(100) DEFAULT '+8801700000000',
-      secondary_btn_text VARCHAR(100) DEFAULT '💬 WhatsApp',
+      secondary_btn_text VARCHAR(100) DEFAULT 'WhatsApp',
       secondary_btn_link VARCHAR(100) DEFAULT '8801700000000',
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )

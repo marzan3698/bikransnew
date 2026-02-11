@@ -57,6 +57,7 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
         { id: 'user-monitor-partial', label: 'যারা আংশিক ব্যবহার করেছে', icon: 'users' },
       ],
     },
+    { id: 'plex-deployment', label: 'Plex Auto Deployment', icon: 'deploy' },
     { id: 'settings', label: 'Settings', icon: 'settings' },
   ]
 
@@ -154,6 +155,12 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
           <line x1="3" y1="6" x2="3.01" y2="6" />
           <line x1="3" y1="12" x2="3.01" y2="12" />
           <line x1="3" y1="18" x2="3.01" y2="18" />
+        </svg>
+      ),
+      deploy: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z" />
+          <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
         </svg>
       ),
       settings: (
