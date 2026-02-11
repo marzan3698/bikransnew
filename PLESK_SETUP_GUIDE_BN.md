@@ -49,6 +49,16 @@ git commit -m "Add deployment files, InstantVideoEditor, Music, Frame features"
 git push -u origin main
 ```
 
+## সম্পন্ন ধাপ: নতুন Repo সংযোগ ও Push (২০২৬-০২-১১)
+
+**কৃত কাজ:**
+- `bikransnew` নতুন GitHub repo তৈরি হয়েছে
+- Remote পরিবর্তন: `https://github.com/marzan3698/bikransnew.git`
+- সব কোড নতুন repo-তে push করা হয়েছে
+- Branch: `main` (tracking সেট করা হয়েছে)
+
+---
+
 ### ধাপ ৩: (ঐচ্ছিক) পুরনো Repository মুছুন
 
 পুরনো `BikransOfficialSite` রিপো আর লাগবে না এমন হলে:
@@ -63,7 +73,7 @@ git push -u origin main
 
 ### লোকাল প্রজেক্ট এবং GitHub সংযোগ
 
-- **GitHub Repository:** https://github.com/marzan3698/BikransOfficialSite.git
+- **GitHub Repository:** https://github.com/marzan3698/bikransnew.git *(বর্তমান)*
 - **Branch:** main
 - **স্থিতি:** সংযুক্ত আছে (fetch ও push উভয়েই কাজ করছে)
 - **চেক তারিখ:** ২০২৬-০২-১১
@@ -79,7 +89,7 @@ git push -u origin main
 **কিভাবে করবেন:**
 1. Websites & Domains → bikrans.com → Git
 2. Add Repository ক্লিক করুন
-3. Repository URL দিন: `https://github.com/marzan3698/BikransOfficialSite.git`
+3. Repository URL দিন: `https://github.com/marzan3698/bikransnew.git`
 4. Deployment path: `httpdocs`
 5. Branch: `main`
 6. Deploy করুন / Pull করুন
