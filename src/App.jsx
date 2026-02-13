@@ -429,6 +429,7 @@ function App() {
     }
     return (
       <TikTokCampaign
+        user={user}
         onBack={handleCampaignBack}
         headerSettings={headerSettings}
         footerItems={footerItems}
@@ -458,20 +459,33 @@ function App() {
             style={{ height: `${headerSettings.logo_height}px` }}
           />
           <div className="header-actions">
-            {headerSettings.show_search_btn && (
-              <button className="icon-btn"><span>🔍</span></button>
-            )}
-            {!user && (
+            {user ? (
               <button
-                className="app-btn"
-                onClick={() => setCurrentPage('login')}
-                style={{ background: headerSettings.app_btn_bg_color }}
+                className="header-profile"
+                onClick={() => {
+                  window.history.pushState({}, '', '/user-profile')
+                  setCurrentPage('dashboard')
+                }}
               >
-                লগইন
+                <span className="header-profile-avatar">{user.name?.charAt(0) || 'ই'}</span>
+                <span className="header-profile-name">{user.name || 'ইউজার'}</span>
               </button>
-            )}
-            {headerSettings.show_menu_btn && (
-              <button className="icon-btn menu-btn"><span>☰</span></button>
+            ) : (
+              <>
+                <button
+                  className="header-login-btn"
+                  onClick={() => setCurrentPage('login')}
+                >
+                  লগইন
+                </button>
+                <button
+                  className="header-register-btn"
+                  onClick={() => setCurrentPage('register')}
+                  style={{ background: headerSettings.app_btn_bg_color }}
+                >
+                  নিবন্ধন
+                </button>
+              </>
             )}
           </div>
         </div>

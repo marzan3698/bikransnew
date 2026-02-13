@@ -28,7 +28,7 @@ const FAQ_ITEMS = [
   },
 ]
 
-function TikTokCampaign({ onBack, headerSettings, footerItems, showFooter = true, onNavigateToLogin, onAutoLogin, onGoToDashboard }) {
+function TikTokCampaign({ user, onBack, headerSettings, footerItems, showFooter = true, onNavigateToLogin, onAutoLogin, onGoToDashboard }) {
   const [showRegisterPopup, setShowRegisterPopup] = useState(false)
   const [openFaqIndex, setOpenFaqIndex] = useState(null)
   const [formData, setFormData] = useState({
@@ -137,18 +137,30 @@ function TikTokCampaign({ onBack, headerSettings, footerItems, showFooter = true
             style={{ height: `${headerSettings?.logo_height || 36}px` }}
           />
           <div className="header-actions">
-            {headerSettings?.show_search_btn && (
-              <button className="icon-btn"><span>🔍</span></button>
-            )}
-            <button 
-              className="app-btn" 
-              onClick={onBack}
-              style={{ background: headerSettings?.app_btn_bg_color || '#52B788' }}
-            >
-              {headerSettings?.app_btn_text || 'বিক্রান্স অ্যাপ'}
-            </button>
-            {headerSettings?.show_menu_btn && (
-              <button className="icon-btn menu-btn"><span>☰</span></button>
+            {user ? (
+              <button
+                className="header-profile"
+                onClick={onGoToDashboard}
+              >
+                <span className="header-profile-avatar">{user.name?.charAt(0) || 'ই'}</span>
+                <span className="header-profile-name">{user.name || 'ইউজার'}</span>
+              </button>
+            ) : (
+              <>
+                <button
+                  className="header-login-btn"
+                  onClick={onNavigateToLogin}
+                >
+                  লগইন
+                </button>
+                <button
+                  className="header-register-btn"
+                  onClick={() => setShowRegisterPopup(true)}
+                  style={{ background: headerSettings?.app_btn_bg_color || '#52B788' }}
+                >
+                  নিবন্ধন
+                </button>
+              </>
             )}
           </div>
         </div>
