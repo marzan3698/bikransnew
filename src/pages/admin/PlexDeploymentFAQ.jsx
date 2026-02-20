@@ -179,10 +179,11 @@ function PlexDeploymentFAQ() {
             </div>
 
             <h4>৪. (প্রয়োজন হলে) Node Restart</h4>
-            <p>কিছু ক্ষেত্রে পরিবর্তন দেখাতে Node অ্যাপ রিস্টার্ট করুন:</p>
+            <p>কিছু ক্ষেত্রে পরিবর্তন দেখাতে Node অ্যাপ রিস্টার্ট করুন। <strong>“Process bikrans not found”</strong> এরর এড়াতে এই কমান্ড ব্যবহার করুন (প্রথমবার বা সার্ভার রিবুটের পরও কাজ করবে):</p>
             <div className="plex-code-block">
-              <code>npx pm2 restart bikrans</code>
+              <code>(npx pm2 restart bikrans --update-env 2&gt;/dev/null || npx pm2 start server/index.js --name bikrans) &amp;&amp; npx pm2 save 2&gt;/dev/null || true</code>
             </div>
+            <p><em>বিঃদ্রঃ: শুধু <code>npx pm2 restart bikrans</code> চালালে প্রথম ডেপ্লয় বা সার্ভার রিবুটের পর “Process or Namespace bikrans not found” এরর আসে—কারণ তখন PM2-এ bikrans প্রসেস নেই। উপরের কমান্ড সেই ক্ষেত্রেও সঠিকভাবে start করবে।</em></p>
 
             <p><strong>সংক্ষেপে:</strong> Push → Pull → Build → (প্রয়োজন হলে) Restart</p>
 
@@ -193,7 +194,7 @@ function PlexDeploymentFAQ() {
                 <ol>
                   <li>Plesk থেকে Pull করুন</li>
                   <li>SSH এ <code>npm run build</code> চালান</li>
-                  <li>প্রয়োজনে <code>npx pm2 restart bikrans</code></li>
+                  <li>প্রয়োজনে উপরের restart/start কমান্ড চালান</li>
                 </ol>
                 <p>প্রথমে প্রজেক্ট ফোল্ডারে যান (যেকোনো একটি):</p>
                 <div className="plex-code-block">
@@ -337,10 +338,17 @@ function PlexDeploymentFAQ() {
               <span className="plex-field-note">ফাইলগুলো ডেপ্লয় হবে যে ডিরেক্টরিতে</span>
             </div>
 
-            <div className="plex-field-card full-width">
+            <div className="plex-field-card full-width plex-field-warning">
               <span className="plex-field-label">Enable additional deployment actions</span>
-              <span className="plex-field-value">প্রাথমিকভাবে unchecked রাখুন</span>
-              <span className="plex-field-note">ডেপ্লয়মেন্টের সময় চালানোর জন্য শেল কমান্ড (পরবর্তী ধাপে সেট করা যাবে)</span>
+              <span className="plex-field-value">চেক করুন ✓</span>
+              <span className="plex-field-note">চেক করলে ডেপ্লয়ের পর <strong>build</strong> ও <strong>Node অ্যাপ রিস্টার্ট</strong> অটোমেটিক চালাবে। নিচের কমান্ড <strong>Deploy command</strong> ফিল্ডে দিন।</span>
+            </div>
+            <div className="plex-field-card full-width plex-deploy-command">
+              <span className="plex-field-label">Deploy command (চেক করার পর যে বক্স দেখা যাবে)</span>
+              <div className="plex-code-block">
+                <code>cd ~/httpdocs &amp;&amp; npm run build &amp;&amp; (npx pm2 restart bikrans --update-env 2&gt;/dev/null || npx pm2 start server/index.js --name bikrans) &amp;&amp; npx pm2 save 2&gt;/dev/null || true</code>
+              </div>
+              <span className="plex-field-note"><strong>ব্যাখ্যা:</strong> প্রথমে build করে। তারপর <code>pm2 restart</code> চেষ্টা করে—যদি “bikrans” না থাকে (প্রথম ডেপ্লয়/সার্ভার রিবুট) তাহলে <code>pm2 start</code> চালায়। তাই “Process not found” এরর আসবে না।</span>
             </div>
           </div>
 

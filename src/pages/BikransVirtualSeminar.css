@@ -1,0 +1,129 @@
+/* Bikrans Virtual Seminar - Mobile Landscape Only */
+/* Design: Green header, white content area with green border */
+
+.virtual-seminar {
+  min-height: 100vh;
+  background: #fff;
+  position: relative;
+}
+
+/* Rotate overlay - shown when portrait or desktop */
+.virtual-seminar-rotate-overlay {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+}
+
+.virtual-seminar-rotate-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  animation: rotate-hint 2s ease-in-out infinite;
+}
+
+@keyframes rotate-hint {
+  0%, 100% { transform: rotate(-90deg); }
+  50% { transform: rotate(0deg); }
+}
+
+.virtual-seminar-rotate-overlay h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.virtual-seminar-rotate-overlay p {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Header - Green background */
+.virtual-seminar-header {
+  background: #4CAF50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  min-height: 56px;
+}
+
+.virtual-seminar-logo-box {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.virtual-seminar-logo {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}
+
+.virtual-seminar-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+  padding-right: 44px; /* for back button space */
+}
+
+/* Main content - White with green border */
+.virtual-seminar-main {
+  flex: 1;
+  padding: 16px;
+  margin: 0;
+  border: 3px solid #4CAF50;
+  border-top: none;
+  margin: 0 16px;
+  min-height: calc(100vh - 56px - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.virtual-seminar-content {
+  text-align: center;
+  width: 100%;
+}
+
+.virtual-seminar-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* Back button */
+.virtual-seminar-back-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  z-index: 100;
+}
+
+.virtual-seminar-back-btn:hover {
+  background: #45a049;
+  transform: translateX(-50%) scale(1.02);
+}

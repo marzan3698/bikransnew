@@ -26,12 +26,14 @@ import FrameAdd from './pages/admin/FrameAdd'
 import FrameList from './pages/admin/FrameList'
 import PlexDeploymentFAQ from './pages/admin/PlexDeploymentFAQ'
 import InstantVideoEditor from './pages/InstantVideoEditor'
+import BikransVirtualSeminar from './pages/BikransVirtualSeminar'
 
 function getInitialPage() {
   const path = window.location.pathname
   if (path === '/admin-panel') return 'admin-login'
   if (path === '/tiktok-campaign') return 'tiktok-campaign'
   if (path === '/video-editor') return 'video-editor'
+  if (path === '/virtual-seminar') return 'virtual-seminar'
   if (path === '/user-profile') return 'login'
   return 'home'
 }
@@ -102,6 +104,8 @@ function App() {
         setCurrentPage('tiktok-campaign')
       } else if (path === '/video-editor') {
         setCurrentPage('video-editor')
+      } else if (path === '/virtual-seminar') {
+        setCurrentPage('virtual-seminar')
       } else if (path === '/user-profile') {
         const statePage = e?.state?.page
         setCurrentPage(user ? (statePage === 'user-tasks' ? 'user-tasks' : 'dashboard') : 'login')
@@ -406,6 +410,19 @@ function App() {
     )
   }
 
+  // Bikrans Virtual Seminar page (mobile landscape only)
+  if (currentPage === 'virtual-seminar') {
+    return (
+      <BikransVirtualSeminar
+        onBack={() => {
+          setCurrentPage('home')
+          window.history.pushState(null, '', '/')
+        }}
+        headerSettings={headerSettings}
+      />
+    )
+  }
+
   // Video Editor page
   if (currentPage === 'video-editor') {
     return (
@@ -545,6 +562,20 @@ function App() {
           }}
         >
           ফ্রি ভিডিও জেনারেট
+        </button>
+      </section>
+
+      <section className="video-editor-card virtual-seminar-card">
+        <h3 className="video-editor-title">Bikrans Virtual Seminar</h3>
+        <p className="video-editor-desc">একটি ডাইনামিক হোয়াইটবোর্ড</p>
+        <button
+          className="video-editor-btn"
+          onClick={() => {
+            setCurrentPage('virtual-seminar')
+            window.history.pushState(null, '', '/virtual-seminar')
+          }}
+        >
+          সেমিনারে যান
         </button>
       </section>
 
