@@ -5,6 +5,8 @@
   min-height: 100vh;
   background: #fff;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Rotate overlay - shown when portrait or desktop */
@@ -76,51 +78,65 @@
   margin: 0;
   flex: 1;
   text-align: center;
-  padding-right: 44px; /* for back button space */
 }
 
-/* Fullscreen button - shown when landscape, hidden in fullscreen */
-.virtual-seminar-fullscreen-btn {
-  display: block;
-  width: calc(100% - 32px);
-  max-width: 280px;
-  margin: 12px auto;
-  padding: 10px 20px;
-  background: #4CAF50;
+.virtual-seminar-viewer-count {
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.25);
   color: #fff;
-  border: none;
-  border-radius: 24px;
-  font-size: 0.95rem;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-right: 8px;
+}
+
+/* Fullscreen button - inside header, right side */
+.virtual-seminar-fullscreen-btn {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.35);
+  white-space: nowrap;
 }
 
 .virtual-seminar-fullscreen-btn:hover {
-  background: #45a049;
+  background: rgba(255, 255, 255, 0.35);
 }
 
-.virtual-seminar-fullscreen-btn:active {
-  transform: scale(0.98);
-}
-
-/* Main content - White with green border */
+/* Main content - Whiteboard, green border fills to edges, no gap */
 .virtual-seminar-main {
   flex: 1;
-  padding: 16px;
+  padding: 12px;
   margin: 0;
   border: 3px solid #4CAF50;
-  border-top: none;
-  margin: 0 16px;
-  min-height: calc(100vh - 56px - 60px);
+  background: #fff;
+  min-height: 0;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .virtual-seminar-content {
+  position: relative;
   text-align: center;
   width: 100%;
+  height: 100%;
+  max-width: 100%;
+  background: #fff;
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  min-height: 0;
 }
 
 .virtual-seminar-content h2 {
@@ -130,25 +146,642 @@
   margin: 0;
 }
 
-/* Back button */
-.virtual-seminar-back-btn {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+.virtual-seminar-loading {
+  font-size: 1rem;
+  color: #666;
+}
+
+.virtual-seminar-empty {
+  text-align: center;
+  color: #555;
+  padding: 1rem;
+}
+
+.virtual-seminar-empty h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.virtual-seminar-empty p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.virtual-seminar-countdown {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.virtual-seminar-countdown h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+}
+
+.virtual-seminar-countdown-timer {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #4CAF50;
+  font-variant-numeric: tabular-nums;
+}
+
+.virtual-seminar-ended {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border-radius: 12px;
+  margin: 1rem;
+}
+
+.virtual-seminar-ended h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2e7d32;
+  margin: 0 0 0.5rem;
+}
+
+.virtual-seminar-ended p {
+  font-size: 1.2rem;
+  color: #388e3c;
+  margin: 0;
+}
+
+.virtual-seminar-register {
+  padding: 1.5rem;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.virtual-seminar-register h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+}
+
+.vs-register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.vs-register-input {
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.vs-register-input:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.vs-register-error {
+  color: #c62828;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.vs-register-btn {
+  padding: 12px 20px;
   background: #4CAF50;
   color: #fff;
   border: none;
-  padding: 10px 24px;
-  border-radius: 24px;
-  font-size: 0.95rem;
+  border-radius: 8px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
-  z-index: 100;
 }
 
-.virtual-seminar-back-btn:hover {
-  background: #45a049;
-  transform: translateX(-50%) scale(1.02);
+.vs-register-btn:hover:not(:disabled) {
+  background: #43a047;
 }
+
+.vs-register-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Fullscreen popup - shown right after rotate, before countdown/registration/whiteboard */
+.virtual-seminar-fullscreen-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 1000;
+}
+
+.virtual-seminar-fullscreen-popup-box {
+  background: linear-gradient(135deg, #2e7d32 0%, #4CAF50 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  max-width: 320px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.virtual-seminar-fullscreen-popup-message {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.5rem;
+}
+
+.virtual-seminar-fullscreen-popup-hint {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 1.5rem;
+}
+
+.virtual-seminar-fullscreen-popup-btn {
+  padding: 14px 36px;
+  background: #fff;
+  color: #2e7d32;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.virtual-seminar-fullscreen-popup-btn:hover {
+  background: #f5f5f5;
+}
+
+/* Fullscreen gate overlay - shown before whiteboard until user enters fullscreen */
+.virtual-seminar-fullscreen-gate {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #2e7d32 0%, #4CAF50 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  z-index: 10;
+}
+
+.virtual-seminar-fullscreen-gate-message {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 1.5rem;
+}
+
+.virtual-seminar-fullscreen-gate-btn {
+  padding: 16px 40px;
+  background: #fff;
+  color: #2e7d32;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.virtual-seminar-fullscreen-gate-btn:hover {
+  background: #f5f5f5;
+}
+
+.virtual-seminar-fullscreen-gate-fallback {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 1rem 0 0;
+}
+
+.virtual-seminar-timeline-items {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+}
+
+.vs-item {
+  width: 100%;
+  max-width: 100%;
+  background: #f5f5f5;
+  border-radius: 8px;
+  overflow: hidden;
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.vs-video {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.vs-video iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: none;
+  flex: 1;
+}
+
+.vs-audio-hidden {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.vs-poll,
+.vs-quiz {
+  padding: 0.5rem;
+  text-align: left;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.vs-poll-q,
+.vs-quiz-q {
+  margin: 0 0 0.35rem;
+  font-weight: 600;
+  font-size: clamp(0.7rem, 2vw, 0.9rem);
+  color: #1a1a1a;
+}
+
+.vs-poll ul,
+.vs-quiz ul {
+  margin: 0;
+  padding-left: 1rem;
+  font-size: clamp(0.65rem, 1.8vw, 0.85rem);
+  color: #444;
+}
+
+/* Interactive poll */
+.vs-poll-interactive {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  overflow-y: auto;
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+  border-radius: 12px;
+  padding: 0.6rem;
+}
+
+.vs-poll-timer {
+  margin: 0 0 0.2rem;
+  font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+  color: #555;
+}
+
+.vs-poll-stats {
+  margin: 0 0 0.35rem;
+  font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+  color: #37474f;
+  background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+  padding: 0.3rem 0.5rem;
+  border-radius: 8px;
+  border-left: 3px solid #1976d2;
+}
+
+.vs-poll-stats strong {
+  color: #1565c0;
+}
+
+.vs-poll-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  gap: 0.5rem;
+}
+
+.vs-poll-left {
+  flex: 0 0 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.vs-poll-right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.vs-poll-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.vs-poll-option-btn {
+  padding: 0.4rem 0.65rem;
+  font-size: clamp(0.6rem, 1.6vw, 0.8rem);
+  border: 2px solid #2e7d32;
+  background: linear-gradient(180deg, #fff 0%, #e8f5e9 100%);
+  color: #1b5e20;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+}
+
+.vs-poll-option-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #2e7d32 0%, #1b5e20 100%);
+  color: #fff;
+  transform: translateX(4px);
+}
+
+.vs-poll-option-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.vs-poll-error {
+  margin: 0;
+  font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+  color: #c62828;
+}
+
+/* Vertical bar chart - bars grow upward */
+.vs-poll-chart-vertical {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  flex: 1;
+  min-height: 80px;
+  gap: 0.25rem;
+}
+
+.vs-poll-chart-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.vs-poll-chart-col .vs-poll-chart-count {
+  font-size: clamp(0.55rem, 1.4vw, 0.7rem);
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.vs-poll-chart-bar-wrap {
+  width: 100%;
+  flex: 1;
+  min-height: 2rem;
+  display: flex;
+  flex-direction: column-reverse;
+  background: linear-gradient(180deg, #f5f5f5 0%, #e0e0e0 100%);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.vs-poll-chart-bar {
+  width: 100%;
+  min-height: 2px;
+  border-radius: 4px;
+  transition: height 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  align-self: flex-end;
+}
+
+.vs-poll-bar-green {
+  background: linear-gradient(180deg, #43a047 0%, #2e7d32 100%);
+  box-shadow: 0 0 8px rgba(46, 125, 50, 0.4);
+}
+
+.vs-poll-bar-blue {
+  background: linear-gradient(180deg, #42a5f5 0%, #1976d2 100%);
+  box-shadow: 0 0 8px rgba(25, 118, 210, 0.4);
+}
+
+.vs-poll-bar-yellow {
+  background: linear-gradient(180deg, #ffca28 0%, #ffa000 100%);
+  box-shadow: 0 0 8px rgba(255, 160, 0, 0.4);
+}
+
+.vs-poll-bar-red {
+  background: linear-gradient(180deg, #ef5350 0%, #c62828 100%);
+  box-shadow: 0 0 8px rgba(198, 40, 40, 0.4);
+}
+
+.vs-poll-chart-col .vs-poll-chart-label {
+  margin-top: 0.2rem;
+  font-size: clamp(0.5rem, 1.2vw, 0.65rem);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Interactive quiz */
+.vs-quiz-interactive {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  overflow-y: auto;
+}
+
+.vs-quiz-timer {
+  margin: 0 0 0.2rem;
+  font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+  color: #666;
+}
+
+.vs-quiz-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.vs-quiz-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  gap: 0.5rem;
+}
+
+.vs-quiz-left {
+  flex: 0 0 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.vs-quiz-right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.vs-quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.vs-quiz-option-btn {
+  padding: 0.3rem 0.5rem;
+  font-size: clamp(0.6rem, 1.5vw, 0.8rem);
+  text-align: left;
+  border: 1px solid #555;
+  background: #fff;
+  color: #333;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.vs-quiz-option-btn:hover:not(:disabled) {
+  border-color: #2e7d32;
+  background: #f1f8e9;
+}
+
+.vs-quiz-option-selected {
+  border-color: #2e7d32;
+  background: #e8f5e9;
+}
+
+.vs-quiz-option-btn:disabled {
+  cursor: default;
+}
+
+.vs-quiz-submit-btn {
+  align-self: flex-start;
+  padding: 0.35rem 0.8rem;
+  font-size: clamp(0.65rem, 1.6vw, 0.8rem);
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.vs-quiz-submit-btn:hover:not(:disabled) {
+  background: #1b5e20;
+}
+
+.vs-quiz-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.vs-quiz-error {
+  margin: 0;
+  font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+  color: #c62828;
+}
+
+.vs-quiz-result {
+  padding: 0.4rem 0.5rem;
+  font-size: clamp(0.65rem, 1.6vw, 0.8rem);
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.vs-quiz-result-correct {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.vs-quiz-result-wrong {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.vs-quiz-correct-answer {
+  display: block;
+  font-weight: 500;
+  font-size: 0.9em;
+  margin-top: 0.2rem;
+}
+
+.vs-quiz-ticker-wrap {
+  margin-top: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-height: 0;
+}
+
+.vs-quiz-ticker-heading {
+  margin: 0;
+  font-size: clamp(0.55rem, 1.3vw, 0.7rem);
+  font-weight: 600;
+  color: #37474f;
+}
+
+.vs-quiz-ticker {
+  max-height: 65px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.vs-quiz-ticker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.3rem 0.4rem;
+  animation: vs-quiz-ticker-scroll 25s linear infinite;
+}
+
+.vs-quiz-ticker-item {
+  font-size: clamp(0.55rem, 1.3vw, 0.68rem);
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes vs-quiz-ticker-scroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+.vs-asset {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.vs-asset img {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.vs-asset a {
+  display: block;
+  padding: 0.5rem;
+  color: #4CAF50;
+  font-size: 0.9rem;
+}
+

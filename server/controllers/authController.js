@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs'
 import { body, validationResult } from 'express-validator'
 import { query } from '../config/database.js'
 import { generateToken } from '../middleware/auth.js'
+import { getPermissionsForRole } from '../helpers/permissions.js'
 
 export async function checkPhone(req, res) {
   try {
@@ -54,6 +55,7 @@ export async function login(req, res) {
       'SELECT p.id, p.code, p.name FROM projects p INNER JOIN user_projects up ON p.id = up.project_id WHERE up.user_id = ?',
       [user.id]
     )
+    const permissions = await getPermissionsForRole(user.role)
     res.json({
       token,
       user: {
@@ -62,6 +64,7 @@ export async function login(req, res) {
         email: user.email,
         phone: user.phone,
         role: user.role,
+        permissions,
         status: user.status,
         projects: projects || [],
       },
@@ -248,7 +251,8 @@ export async function me(req, res) {
       'SELECT p.id, p.code, p.name FROM projects p INNER JOIN user_projects up ON p.id = up.project_id WHERE up.user_id = ?',
       [req.userId]
     )
-    res.json({ ...user, projects: projects || [] })
+    const permissions = await getPermissionsForRole(user.role)
+    res.json({ ...user, permissions, projects: projects || [] })
   } catch (err) {
     res.status(500).json({ error: 'Failed to get user' })
   }

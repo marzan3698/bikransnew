@@ -62,6 +62,47 @@
   width: 80px;
 }
 
+/* Auto-hide on timeline-add page */
+.admin-sidebar.sidebar-auto-hidden {
+  width: 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  border: none;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Floating toggle icon when sidebar is hidden on timeline-add */
+.admin-sidebar-toggle-indicator {
+  position: fixed;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 101;
+  width: 44px;
+  height: 44px;
+  background: var(--sidebar-bg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: var(--sidebar-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: background 0.2s, color 0.2s;
+}
+
+.admin-sidebar-toggle-indicator:hover {
+  background: var(--sidebar-hover);
+  color: var(--sidebar-text-hover);
+}
+
+.admin-sidebar-toggle-indicator svg {
+  width: 22px;
+  height: 22px;
+}
+
 /* Sidebar Header */
 .sidebar-header {
   height: 65px;

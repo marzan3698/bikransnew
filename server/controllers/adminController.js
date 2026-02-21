@@ -98,7 +98,7 @@ export const createUserValidation = [
   body('email').isEmail().withMessage('Valid email required'),
   body('phone').matches(/^01[3-9]\d{8}$/).withMessage('Valid 11-digit phone required'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-  body('role').optional().isIn(['admin', 'manager', 'user']).withMessage('Invalid role'),
+  body('role').optional().isIn(['admin', 'manager', 'user', 'presentation_manager']).withMessage('Invalid role'),
 ]
 
 export async function createUser(req, res) {
@@ -203,7 +203,8 @@ export async function updateUserRole(req, res) {
   try {
     const id = parseInt(req.params.id)
     const { role } = req.body
-    if (!['admin', 'manager', 'user'].includes(role)) {
+    const validRoles = ['admin', 'manager', 'user', 'presentation_manager']
+    if (!validRoles.includes(role)) {
       return res.status(400).json({ error: 'Invalid role' })
     }
 

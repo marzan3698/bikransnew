@@ -1,0 +1,194 @@
+.poll-add-page {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.poll-add-page .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.poll-add-page .page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.poll-add-error {
+  background: rgba(248, 81, 73, 0.15);
+  border: 1px solid #f85149;
+  color: #f85149;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.poll-add-form {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.poll-add-form .poll-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.poll-add-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.poll-add-form .form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #c9d1d9;
+  margin-bottom: 0.5rem;
+}
+
+.poll-add-form .form-group textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  color: #c9d1d9;
+  font-size: 0.95rem;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.poll-add-form .form-group textarea::placeholder {
+  color: #6e7681;
+}
+
+.poll-add-form .form-group textarea:focus {
+  outline: none;
+  border-color: #58a6ff;
+}
+
+.poll-add-form .options-section {
+  margin-top: 1.25rem;
+}
+
+.poll-add-form .options-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.poll-add-form .options-header label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #c9d1d9;
+}
+
+.poll-add-form .btn-add-option {
+  background: #21262d;
+  color: #58a6ff;
+  border: 1px solid #30363d;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.poll-add-form .btn-add-option:hover {
+  background: #30363d;
+}
+
+.poll-add-form .option-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.poll-add-form .option-row input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  color: #c9d1d9;
+  font-size: 0.95rem;
+}
+
+.poll-add-form .option-row input::placeholder {
+  color: #6e7681;
+}
+
+.poll-add-form .option-row input:focus {
+  outline: none;
+  border-color: #58a6ff;
+}
+
+.poll-add-form .btn-remove-option {
+  width: 40px;
+  flex-shrink: 0;
+  background: #21262d;
+  color: #f85149;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.poll-add-form .btn-remove-option:hover:not(:disabled) {
+  background: rgba(248, 81, 73, 0.15);
+}
+
+.poll-add-form .btn-remove-option:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.poll-add-form .form-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.poll-add-form .btn-primary {
+  background: #238636;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.poll-add-form .btn-primary:hover:not(:disabled) {
+  background: #2ea043;
+}
+
+.poll-add-form .btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.poll-add-form .btn-secondary {
+  background: #21262d;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.poll-add-form .btn-secondary:hover {
+  background: #30363d;
+}

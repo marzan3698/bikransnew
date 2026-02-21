@@ -118,6 +118,7 @@ function UserManagement({ currentUser }) {
           <option value="">All Roles</option>
           <option value="admin">Admin</option>
           <option value="manager">Manager</option>
+          <option value="presentation_manager">প্রেজেন্টেশন ম্যানেজার</option>
           <option value="user">User</option>
         </select>
       </div>
@@ -155,6 +156,7 @@ function UserManagement({ currentUser }) {
                           className="role-select"
                         >
                           <option value="user">user</option>
+                          <option value="presentation_manager">প্রেজেন্টেশন ম্যানেজার</option>
                           <option value="manager">manager</option>
                           <option value="admin">admin</option>
                         </select>
@@ -209,6 +211,7 @@ function UserManagement({ currentUser }) {
               <input required type="password" placeholder="Password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
               <select value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })}>
                 <option value="user">user</option>
+                <option value="presentation_manager">প্রেজেন্টেশন ম্যানেজার</option>
                 <option value="manager">manager</option>
                 <option value="admin">admin</option>
               </select>

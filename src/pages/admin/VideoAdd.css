@@ -1,0 +1,143 @@
+.video-add-page {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.video-add-page .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.video-add-page .page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.video-add-error {
+  background: rgba(248, 81, 73, 0.15);
+  border: 1px solid #f85149;
+  color: #f85149;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.video-add-form {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.video-add-form .video-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.video-add-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.video-add-form .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.video-add-form .form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #c9d1d9;
+  margin-bottom: 0.5rem;
+}
+
+.video-add-form .form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  color: #c9d1d9;
+  font-size: 0.95rem;
+}
+
+.video-add-form .form-group input::placeholder {
+  color: #6e7681;
+}
+
+.video-add-form .form-group input:focus {
+  outline: none;
+  border-color: #58a6ff;
+}
+
+.video-add-form .form-group small {
+  display: block;
+  font-size: 0.8rem;
+  color: #6e7681;
+  margin-top: 0.35rem;
+}
+
+.video-add-form .video-preview-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  background: #0d1117;
+  border-radius: 8px;
+}
+
+.video-add-form .video-preview-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video-add-form .form-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.video-add-form .btn-primary {
+  background: #238636;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.video-add-form .btn-primary:hover:not(:disabled) {
+  background: #2ea043;
+}
+
+.video-add-form .btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.video-add-form .btn-secondary {
+  background: #21262d;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.video-add-form .btn-secondary:hover {
+  background: #30363d;
+}

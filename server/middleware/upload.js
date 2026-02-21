@@ -107,6 +107,51 @@ export const uploadTaskAttachment = multer({
   limits: { fileSize: TASK_MAX_SIZE },
 }).single('file')
 
+// Asset gallery upload (image, video, audio, document) - max 50MB
+const ASSET_UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads', 'assets')
+const ASSET_MAX_SIZE = 50 * 1024 * 1024 // 50MB
+const ASSET_ALLOWED_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+  'video/mp4',
+  'video/webm',
+  'video/quicktime',
+  'audio/mpeg',
+  'audio/mp3',
+  'audio/wav',
+  'audio/ogg',
+  'audio/webm',
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+]
+
+if (!fs.existsSync(ASSET_UPLOAD_DIR)) {
+  fs.mkdirSync(ASSET_UPLOAD_DIR, { recursive: true })
+}
+
+const assetStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, ASSET_UPLOAD_DIR),
+  filename: (req, file, cb) =>
+    cb(null, `${Date.now()}_${(file.originalname || 'file').replace(/[^a-zA-Z0-9.-]/g, '_')}`),
+})
+
+const assetFileFilter = (req, file, cb) => {
+  if (ASSET_ALLOWED_TYPES.includes(file.mimetype)) {
+    cb(null, true)
+  } else {
+    cb(new Error('File type not allowed. Use image, video, audio, or document.'), false)
+  }
+}
+
+export const uploadAsset = multer({
+  storage: assetStorage,
+  fileFilter: assetFileFilter,
+  limits: { fileSize: ASSET_MAX_SIZE },
+}).single('file')
+
 // Landing service icon (small icons for service cards)
 const LANDING_UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads', 'landing')
 const LANDING_ICON_MAX_SIZE = 500 * 1024 // 500KB
@@ -201,6 +246,22 @@ export const uploadMusic = multer({
   limits: { fileSize: AUDIO_MAX_SIZE },
 }).single('audio')
 
+// Presentation audio (same types/size as music, different folder)
+const PRESENTATION_AUDIO_DIR = path.join(process.cwd(), 'public', 'uploads', 'presentation-audio')
+if (!fs.existsSync(PRESENTATION_AUDIO_DIR)) {
+  fs.mkdirSync(PRESENTATION_AUDIO_DIR, { recursive: true })
+}
+const presentationAudioStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, PRESENTATION_AUDIO_DIR),
+  filename: (req, file, cb) =>
+    cb(null, `pa_${Date.now()}${path.extname(file.originalname) || '.mp3'}`),
+})
+export const uploadPresentationAudio = multer({
+  storage: presentationAudioStorage,
+  fileFilter: audioFileFilter,
+  limits: { fileSize: AUDIO_MAX_SIZE },
+}).single('audio')
+
 // Video upload for instant video editor (temp processing, max 100MB)
 const VIDEO_TEMP_DIR = path.join(process.cwd(), 'public', 'uploads', 'temp', 'video')
 const VIDEO_MAX_SIZE = 100 * 1024 * 1024 // 100MB
@@ -234,3 +295,39 @@ export const uploadVideo = multer({
   fileFilter: videoFileFilter,
   limits: { fileSize: VIDEO_MAX_SIZE },
 }).single('video')
+
+// Seminar cover upload (image or video, max 20MB)
+const SEMINAR_COVER_DIR = path.join(process.cwd(), 'public', 'uploads', 'seminars')
+const SEMINAR_COVER_MAX_SIZE = 20 * 1024 * 1024 // 20MB
+const SEMINAR_COVER_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'video/mp4',
+  'video/webm',
+  'video/quicktime',
+]
+
+if (!fs.existsSync(SEMINAR_COVER_DIR)) {
+  fs.mkdirSync(SEMINAR_COVER_DIR, { recursive: true })
+}
+
+const seminarCoverStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, SEMINAR_COVER_DIR),
+  filename: (req, file, cb) =>
+    cb(null, `sem_${Date.now()}${path.extname(file.originalname) || '.jpg'}`),
+})
+
+const seminarCoverFilter = (req, file, cb) => {
+  if (SEMINAR_COVER_TYPES.includes(file.mimetype)) {
+    cb(null, true)
+  } else {
+    cb(new Error('Only image (JPG, PNG, WebP) or video (MP4, WebM) allowed'), false)
+  }
+}
+
+export const uploadSeminarCover = multer({
+  storage: seminarCoverStorage,
+  fileFilter: seminarCoverFilter,
+  limits: { fileSize: SEMINAR_COVER_MAX_SIZE },
+}).single('cover')

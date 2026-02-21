@@ -92,8 +92,33 @@ Video processing requires FFmpeg on the server. Install via SSH if not present:
 apt install ffmpeg
 ```
 
-## 5. Troubleshooting
+## 5. মাইগ্রেশন হ্যান্ডবুক (Migration Handbook)
+
+নতুন মাইগ্রেশন (যেমন `quiz_responses`) সাধারণত ডিপ্লয় স্পটে নিজে চালু হয় না। নিচের দুইটা প্রক্রিয়ার যেকোনো একটা থাকলেই হবে:
+
+**ক) Plesk Additional Deployment Actions:**
+- যদি **1.4** অনুযায়ী `deploy.sh` চালানোর কমান্ড সেট করা থাকে, তাহলে প্রতি Pull/Deploy-এ `deploy.sh` চলবে
+- `deploy.sh` এর ভেতর `npm run migrate` আছে → নতুন মাইগ্রেশন স্বয়ংক্রিয়ভাবে চালবে
+
+**খ) ম্যানুয়াল মাইগ্রেশন (Plesk SSH বা Terminal):**
+
+সার্ভারে SSH দিয়ে বা Plesk **Tools & Settings** → **SSH Access** দিয়ে লগইন করে:
+
+```bash
+cd /var/www/vhosts/bikrans.com/httpdocs   # অথবা আপনার deployment path
+npm run migrate
+```
+
+`.env` ফাইলে সঠিক DB credentials থাকলে এই কমান্ড নতুন টেবিল/কলাম যোগ করবে।
+
+**রোলব্যাক (প্রয়োজনে):**
+```bash
+npm run migrate:rollback
+```
+
+## 6. Troubleshooting
 
 - **Migration fails:** Check `.env` DB credentials
 - **403/404:** Verify Node.js app is running and document root
 - **CORS errors:** Ensure `ALLOWED_ORIGIN` matches your domain
+- **নতুন টেবিল দেখা যাচ্ছে না:** Plesk Git → **Pull** করার পর `deploy.sh` চালু হয়েছে কি না `deploy.log` দেখুন; না থাকলে `npm run migrate` ম্যানুয়াল চালান

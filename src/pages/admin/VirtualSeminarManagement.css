@@ -1,0 +1,280 @@
+.virtual-seminar-mgmt {
+  padding: 24px;
+  max-width: 900px;
+}
+
+.vs-mgmt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.vs-mgmt-header .page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.vs-mgmt-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.vs-mgmt-form-card .vs-mgmt-form-full {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vs-form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.vs-form-group input,
+.vs-form-group select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.vs-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.vs-cover-section {
+  padding-top: 8px;
+  border-top: 1px solid #eee;
+}
+
+.vs-cover-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.vs-cover-radio {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.vs-cover-radio input {
+  width: auto;
+  margin: 0;
+}
+
+.vs-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.vs-seminar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vs-seminar-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.vs-seminar-card:hover {
+  border-color: #4CAF50;
+  background: #f9fdf9;
+}
+
+.vs-seminar-card.selected {
+  border-color: #4CAF50;
+  background: #e8f5e9;
+}
+
+.vs-seminar-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.vs-seminar-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1a1a1a;
+}
+
+.vs-status-badge {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.vs-status-upcoming {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.vs-status-live {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.vs-status-ended {
+  background: #f5f5f5;
+  color: #616161;
+}
+
+.vs-seminar-card-meta,
+.vs-seminar-card-timeline {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.vs-edit-btn {
+  margin-top: 10px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  background: #fff;
+  border: 1px solid #4CAF50;
+  color: #4CAF50;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.vs-edit-btn:hover {
+  background: #e8f5e9;
+}
+
+.vs-detail-meta {
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.vs-detail-meta p {
+  margin: 4px 0;
+}
+
+.vs-mgmt-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 16px 0 12px;
+  color: #1a1a1a;
+}
+
+.vs-mgmt-error {
+  padding: 12px;
+  background: #ffebee;
+  color: #c62828;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.vs-mgmt-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.vs-mgmt-card h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 16px;
+  color: #1a1a1a;
+}
+
+.vs-mgmt-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.vs-mgmt-datetime {
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.vs-mgmt-hint {
+  margin: 12px 0 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.vs-mgmt-stats {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.vs-stat {
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  border-radius: 12px;
+  padding: 20px 28px;
+  text-align: center;
+}
+
+.vs-stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2e7d32;
+}
+
+.vs-stat-label {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.vs-mgmt-empty {
+  color: #666;
+  margin: 0;
+}
+
+.vs-reg-table-wrap {
+  overflow-x: auto;
+}
+
+.vs-reg-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.vs-reg-table th,
+.vs-reg-table td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.vs-reg-table th {
+  font-weight: 600;
+  color: #333;
+  background: #f5f5f5;
+}
+
+.vs-reg-table tbody tr:hover {
+  background: #fafafa;
+}

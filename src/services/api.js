@@ -39,6 +39,61 @@ export const themeApi = {
 
 export const publicApi = {
   getProjects: () => request('/public/projects'),
+  getPresentationQuizzes: () => request('/public/presentation-quizzes'),
+  getPolls: () => request('/public/polls'),
+  getPoll: (id) => request(`/public/polls/${id}`),
+  getExternalVideos: () => request('/public/external-videos'),
+  getPresentationAudio: () => request('/public/presentation-audio'),
+  getTimeline: (id) => request(`/public/timelines/${id}`),
+  getPublicSeminars: () => request('/public/seminars'),
+  getVirtualSeminarStatus: (token, seminarId) => {
+    const params = new URLSearchParams()
+    if (token) params.set('token', token)
+    if (seminarId) params.set('seminar', String(seminarId))
+    const q = params.toString() ? `?${params.toString()}` : ''
+    return request(`/public/virtual-seminar-status${q}`)
+  },
+  registerVirtualSeminar: ({ name, phone, seminar_id }) =>
+    request('/public/virtual-seminar-register', {
+      method: 'POST',
+      body: JSON.stringify({ name, phone, ...(seminar_id != null && { seminar_id }) }),
+    }),
+  getVirtualSeminarTimeline: (token, seminarId) => {
+    const params = new URLSearchParams()
+    if (token) params.set('token', token)
+    if (seminarId) params.set('seminar', String(seminarId))
+    const q = params.toString() ? `?${params.toString()}` : ''
+    return request(`/public/virtual-seminar-timeline${q}`)
+  },
+  sendVirtualSeminarHeartbeat: (sessionId) =>
+    request('/public/virtual-seminar-viewer', {
+      method: 'POST',
+      body: JSON.stringify({ sessionId }),
+    }),
+  leaveVirtualSeminar: (sessionId) =>
+    request('/public/virtual-seminar-viewer-leave', {
+      method: 'POST',
+      body: JSON.stringify({ sessionId }),
+    }),
+  leaveVirtualSeminarBeacon: (sessionId) => {
+    const base = API_ORIGIN ? `${API_ORIGIN}${API_BASE}` : API_BASE
+    const url = `${base}/public/virtual-seminar-viewer-leave`
+    const blob = new Blob([JSON.stringify({ sessionId })], { type: 'application/json' })
+    return navigator.sendBeacon?.(url, blob) ?? false
+  },
+  getVirtualSeminarViewerCount: () => request('/public/virtual-seminar-viewer-count'),
+  votePoll: (pollId, body) =>
+    request(`/public/polls/${pollId}/vote`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
+  getQuizCorrectResponders: (quizId) =>
+    request(`/public/presentation-quizzes/${quizId}/correct-responders`),
+  submitQuizAnswer: (quizId, body) =>
+    request(`/public/presentation-quizzes/${quizId}/answer`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
   getAudioTracks: () => request('/public/audio'),
   logAudioPlay: (id, source = 'other') =>
     request(`/public/audio/${id}/play`, {
@@ -373,6 +428,205 @@ export const adminApi = {
     return data
   },
   deleteFrame: (id) => request(`/admin/frames/${id}`, { method: 'DELETE' }),
+
+  // Asset gallery (presentation management)
+  getAssetGallery: (params) => {
+    const q = new URLSearchParams(params || {}).toString()
+    return request(`/admin/assets/gallery${q ? '?' + q : ''}`)
+  },
+  uploadAsset: async (formData) => {
+    const token = getToken()
+    const base = API_ORIGIN ? `${API_ORIGIN}/api` : API_BASE
+    const res = await fetch(`${base}/admin/assets/upload`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData,
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data.error || 'আপলোড ব্যর্থ')
+    return data
+  },
+
+  // Presentation quizzes (presentation management)
+  getPresentationQuizzes: () => request('/admin/presentation-quizzes'),
+  getPresentationQuiz: (id) => request(`/admin/presentation-quizzes/${id}`),
+  createPresentationQuiz: (data) =>
+    request('/admin/presentation-quizzes', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  updatePresentationQuiz: (id, data) =>
+    request(`/admin/presentation-quizzes/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  deletePresentationQuiz: (id) =>
+    request(`/admin/presentation-quizzes/${id}`, { method: 'DELETE' }),
+  reorderPresentationQuizzes: (order) =>
+    request('/admin/presentation-quizzes/reorder', {
+      method: 'PUT',
+      body: JSON.stringify({ order }),
+    }),
+
+  // Polls (presentation management)
+  getPolls: () => request('/admin/polls'),
+  getPoll: (id) => request(`/admin/polls/${id}`),
+  createPoll: (data) =>
+    request('/admin/polls', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  updatePoll: (id, data) =>
+    request(`/admin/polls/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  deletePoll: (id) => request(`/admin/polls/${id}`, { method: 'DELETE' }),
+  reorderPolls: (order) =>
+    request('/admin/polls/reorder', {
+      method: 'PUT',
+      body: JSON.stringify({ order }),
+    }),
+
+  // External videos (presentation management)
+  getExternalVideos: () => request('/admin/external-videos'),
+  getExternalVideo: (id) => request(`/admin/external-videos/${id}`),
+  createExternalVideo: (data) =>
+    request('/admin/external-videos', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  updateExternalVideo: (id, data) =>
+    request(`/admin/external-videos/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  deleteExternalVideo: (id) =>
+    request(`/admin/external-videos/${id}`, { method: 'DELETE' }),
+  reorderExternalVideos: (order) =>
+    request('/admin/external-videos/reorder', {
+      method: 'PUT',
+      body: JSON.stringify({ order }),
+    }),
+
+  // Presentation audio (presentation management)
+  getPresentationAudio: () => request('/admin/presentation-audio'),
+  getPresentationAudioItem: (id) => request(`/admin/presentation-audio/${id}`),
+  createPresentationAudio: async (formData) => {
+    const token = getToken()
+    const base = API_ORIGIN ? `${API_ORIGIN}/api` : API_BASE
+    const res = await fetch(`${base}/admin/presentation-audio`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData,
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data.error || 'অডিও আপলোড ব্যর্থ')
+    return data
+  },
+  updatePresentationAudio: (id, data) =>
+    request(`/admin/presentation-audio/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  deletePresentationAudio: (id) =>
+    request(`/admin/presentation-audio/${id}`, { method: 'DELETE' }),
+  reorderPresentationAudio: (order) =>
+    request('/admin/presentation-audio/reorder', {
+      method: 'PUT',
+      body: JSON.stringify({ order }),
+    }),
+
+  // Timelines (presentation management)
+  getTimelines: () => request('/admin/timelines'),
+  getTimeline: (id) => request(`/admin/timelines/${id}`),
+  createTimeline: (data) =>
+    request('/admin/timelines', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  updateTimeline: (id, data) =>
+    request(`/admin/timelines/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  deleteTimeline: (id) => request(`/admin/timelines/${id}`, { method: 'DELETE' }),
+  addTimelineFrame: (timelineId, data = {}) =>
+    request(`/admin/timelines/${timelineId}/frames`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  updateTimelineFrame: (timelineId, frameId, data) =>
+    request(`/admin/timelines/${timelineId}/frames/${frameId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  deleteTimelineFrame: (timelineId, frameId) =>
+    request(`/admin/timelines/${timelineId}/frames/${frameId}`, { method: 'DELETE' }),
+  addTimelineFrameItem: (timelineId, frameId, itemType, itemRef) =>
+    request(`/admin/timelines/${timelineId}/frames/${frameId}/items`, {
+      method: 'POST',
+      body: JSON.stringify({ item_type: itemType, item_ref: String(itemRef) }),
+    }),
+  updateTimelineFrameItem: (timelineId, frameId, itemId, data) =>
+    request(`/admin/timelines/${timelineId}/frames/${frameId}/items/${itemId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  deleteTimelineFrameItem: (timelineId, frameId, itemId) =>
+    request(`/admin/timelines/${timelineId}/frames/${frameId}/items/${itemId}`, {
+      method: 'DELETE',
+    }),
+
+  // Virtual seminar timeline (presentation management)
+  getVirtualSeminarTimeline: () => request('/admin/virtual-seminar-timeline'),
+  setVirtualSeminarTimeline: (timelineId) =>
+    request('/admin/virtual-seminar-timeline', {
+      method: 'PUT',
+      body: JSON.stringify({ timeline_id: timelineId }),
+    }),
+  getSeminars: () => request('/admin/seminars'),
+  createSeminar: (data) =>
+    request('/admin/seminars', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  getSeminar: (id) => request(`/admin/seminars/${id}`),
+  updateSeminar: (id, data) =>
+    request(`/admin/seminars/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  uploadSeminarCover: async (id, file) => {
+    const fd = new FormData()
+    fd.append('cover', file)
+    const base = API_ORIGIN ? `${API_ORIGIN}${API_BASE}` : API_BASE
+    const url = `${base}/admin/seminars/${id}/cover`
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${getToken()}` },
+      body: fd,
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data?.error || res.statusText)
+    return data
+  },
+  getSeminarRegistrations: (id) => request(`/admin/seminars/${id}/registrations`),
+  getSeminarStats: (id) => request(`/admin/seminars/${id}/stats`),
+
+  // Role & Permission management
+  getPermissions: () => request('/admin/permissions'),
+  getRoles: () => request('/admin/roles'),
+  createRole: (data) => request('/admin/roles', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }),
+  updateRole: (id, data) => request(`/admin/roles/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  }),
+  deleteRole: (id) => request(`/admin/roles/${id}`, { method: 'DELETE' }),
+  getRolePermissions: (id) => request(`/admin/roles/${id}/permissions`),
 }
 
 export const tasksApi = {

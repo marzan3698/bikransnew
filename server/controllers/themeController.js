@@ -1,4 +1,5 @@
 import { query } from '../config/database.js'
+import { getTimelineDataById } from './timelineController.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
@@ -381,5 +382,107 @@ export async function updateAdminBgVideo(req, res) {
   } catch (err) {
     console.error('Update admin bg video error:', err)
     res.status(500).json({ error: 'Failed to update admin background video' })
+  }
+}
+
+// ===== VIRTUAL SEMINAR TIMELINE =====
+
+function getTimelineTokenFromRequest(req) {
+  return req.query?.token || req.headers?.authorization?.replace(/^Bearer\s+/i, '') || null
+}
+
+export async function getVirtualSeminarTimeline(req, res) {
+  try {
+    const seminarId = req.query?.seminar ? parseInt(req.query.seminar, 10) : null
+    let seminar = null
+    if (seminarId && !Number.isNaN(seminarId)) {
+      const [row] = await query(
+        'SELECT id, timeline_id, start_time, end_time FROM seminars WHERE id = ?',
+        [seminarId]
+      )
+      seminar = row ?? null
+    }
+    if (!seminar) {
+      const seminarRows = await query(`
+        SELECT id, timeline_id, start_time, end_time
+        FROM seminars
+        WHERE start_time <= NOW() AND (end_time IS NULL OR end_time >= NOW())
+        ORDER BY start_time DESC
+        LIMIT 1
+      `)
+      seminar = seminarRows[0] ?? null
+    }
+
+    if (!seminar || !seminar.timeline_id) {
+      return res.json({ timeline: null })
+    }
+
+    const startMs = new Date(seminar.start_time).getTime()
+    const endMs = seminar.end_time ? new Date(seminar.end_time).getTime() : null
+    const now = Date.now()
+
+    if (startMs > now) {
+      return res.status(403).json({ error: 'সেমিনার এখনো শুরু হয়নি', timeline: null })
+    }
+    if (endMs && endMs < now) {
+      return res.status(403).json({ error: 'সেমিনার শেষ হয়েছে', timeline: null })
+    }
+
+    const token = getTimelineTokenFromRequest(req)
+    if (!token) {
+      return res.status(403).json({ error: 'রেজিস্ট্রেশন প্রয়োজন', timeline: null })
+    }
+    const [reg] = await query(
+      'SELECT id, seminar_id FROM virtual_seminar_registrations WHERE token = ?',
+      [token]
+    )
+    if (!reg || reg.seminar_id !== seminar.id) {
+      return res.status(403).json({ error: 'অবৈধ অ্যাক্সেস', timeline: null })
+    }
+
+    const origin = req.protocol + '://' + (req.get('host') || '')
+    const data = await getTimelineDataById(seminar.timeline_id, origin)
+    res.json({ timeline: data })
+  } catch (err) {
+    console.error('Get virtual seminar timeline error:', err)
+    res.status(500).json({ error: 'টাইমলাইন লোড করতে ব্যর্থ' })
+  }
+}
+
+export async function getAdminVirtualSeminarTimeline(req, res) {
+  try {
+    const rows = await query(
+      'SELECT virtual_seminar_timeline_id FROM admin_panel_settings LIMIT 1'
+    )
+    const timelineId = rows[0]?.virtual_seminar_timeline_id ?? null
+    res.json({ timeline_id: timelineId })
+  } catch (err) {
+    console.error('Get admin virtual seminar timeline error:', err)
+    res.status(500).json({ error: 'Failed to get virtual seminar timeline' })
+  }
+}
+
+export async function updateVirtualSeminarTimeline(req, res) {
+  try {
+    const timelineId = req.body?.timeline_id
+    const value = timelineId == null || timelineId === '' ? null : parseInt(timelineId, 10)
+
+    const rows = await query('SELECT id FROM admin_panel_settings LIMIT 1')
+    if (rows.length === 0) {
+      await query(
+        'INSERT INTO admin_panel_settings (admin_bg_video_id, virtual_seminar_timeline_id) VALUES (?, ?)',
+        [null, value]
+      )
+    } else {
+      await query(
+        'UPDATE admin_panel_settings SET virtual_seminar_timeline_id = ? WHERE id = ?',
+        [value, rows[0].id]
+      )
+    }
+
+    res.json({ timeline_id: value })
+  } catch (err) {
+    console.error('Update virtual seminar timeline error:', err)
+    res.status(500).json({ error: 'টাইমলাইন সেট করতে ব্যর্থ' })
   }
 }

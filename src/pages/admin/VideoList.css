@@ -1,0 +1,150 @@
+.video-list-page {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.video-list-page .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.video-list-page .header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.video-list-page .page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.video-list-page .video-count {
+  background: #21262d;
+  color: #8b949e;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+}
+
+.video-list-page .btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #238636;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.video-list-page .btn-primary:hover {
+  background: #2ea043;
+}
+
+.video-list-page .btn-icon {
+  font-size: 1.1rem;
+}
+
+.video-list-error {
+  background: rgba(248, 81, 73, 0.15);
+  border: 1px solid #f85149;
+  color: #f85149;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.video-list-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #8b949e;
+  font-size: 1rem;
+}
+
+.video-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.video-card {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.video-card-body {
+  padding: 1rem 1.25rem;
+}
+
+.video-name {
+  font-size: 0.95rem;
+  color: #c9d1d9;
+  margin: 0 0 0.75rem;
+  font-weight: 500;
+}
+
+.video-thumb-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  background: #0d1117;
+  border-radius: 6px;
+}
+
+.video-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid #21262d;
+  background: #0d1117;
+}
+
+.video-card-actions .btn-edit {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #58a6ff;
+  cursor: pointer;
+}
+
+.video-card-actions .btn-edit:hover {
+  background: #30363d;
+}
+
+.video-card-actions .btn-delete {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  background: transparent;
+  border: 1px solid #f85149;
+  border-radius: 6px;
+  color: #f85149;
+  cursor: pointer;
+}
+
+.video-card-actions .btn-delete:hover {
+  background: rgba(248, 81, 73, 0.15);
+}

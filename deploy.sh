@@ -12,6 +12,6 @@ echo "Running migrations..."
 npm run migrate
 
 echo "Ensuring upload directories..."
-mkdir -p public/uploads/{sliders,logos,tasks,landing,frames,audio,temp/video}
+mkdir -p public/uploads/{sliders,logos,tasks,landing,frames,audio,assets,presentation-audio,temp/video}
 
 echo "Deploy complete."

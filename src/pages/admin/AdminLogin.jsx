@@ -14,7 +14,10 @@ function AdminLogin({ onLoginSuccess, onBack }) {
     setLoading(true)
     try {
       const res = await authApi.login(email, password)
-      if (res.user.role === 'admin' || res.user.role === 'manager') {
+      const hasAdminAccess =
+        ['admin', 'manager', 'presentation_manager'].includes(res.user.role) ||
+        (res.user.permissions && res.user.permissions.includes('dashboard'))
+      if (hasAdminAccess) {
         localStorage.setItem('bikrans_token', res.token)
         onLoginSuccess(res.user)
       } else {

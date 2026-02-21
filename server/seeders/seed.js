@@ -32,6 +32,13 @@ const users = [
     password: 'user123',
     role: 'user',
   },
+  {
+    name: 'প্রেজেন্টেশন ম্যানেজার',
+    email: 'presentation@bikrans.com',
+    phone: '01700000004',
+    password: 'presentation123',
+    role: 'presentation_manager',
+  },
 ]
 
 async function seed() {

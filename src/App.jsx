@@ -25,8 +25,22 @@ import MusicList from './pages/admin/MusicList'
 import FrameAdd from './pages/admin/FrameAdd'
 import FrameList from './pages/admin/FrameList'
 import PlexDeploymentFAQ from './pages/admin/PlexDeploymentFAQ'
+import RoleManagement from './pages/admin/RoleManagement'
+import AssetGallery from './pages/admin/AssetGallery'
+import QuizAdd from './pages/admin/QuizAdd'
+import QuizList from './pages/admin/QuizList'
+import PollAdd from './pages/admin/PollAdd'
+import PollList from './pages/admin/PollList'
+import VideoAdd from './pages/admin/VideoAdd'
+import VideoList from './pages/admin/VideoList'
+import AudioAdd from './pages/admin/AudioAdd'
+import AudioList from './pages/admin/AudioList'
+import TimelineBuilder from './pages/admin/TimelineBuilder'
+import TimelineList from './pages/admin/TimelineList'
+import VirtualSeminarManagement from './pages/admin/VirtualSeminarManagement'
 import InstantVideoEditor from './pages/InstantVideoEditor'
 import BikransVirtualSeminar from './pages/BikransVirtualSeminar'
+import SeminarSelection from './pages/SeminarSelection'
 
 function getInitialPage() {
   const path = window.location.pathname
@@ -34,6 +48,7 @@ function getInitialPage() {
   if (path === '/tiktok-campaign') return 'tiktok-campaign'
   if (path === '/video-editor') return 'video-editor'
   if (path === '/virtual-seminar') return 'virtual-seminar'
+  if (path === '/seminar-selection') return 'seminar-selection'
   if (path === '/user-profile') return 'login'
   return 'home'
 }
@@ -77,7 +92,10 @@ function App() {
         try {
           const userData = await authApi.me()
           if (userData) {
-            if (path === '/admin-panel' && (userData.role === 'admin' || userData.role === 'manager')) {
+            const hasAdminAccess =
+              ['admin', 'manager', 'presentation_manager'].includes(userData.role) ||
+              (userData.permissions && userData.permissions.includes('dashboard'))
+            if (path === '/admin-panel' && hasAdminAccess) {
               setAdminUser(userData)
               setCurrentPage('admin-panel')
             } else if (path === '/user-profile' || userData.role === 'user') {
@@ -106,6 +124,8 @@ function App() {
         setCurrentPage('video-editor')
       } else if (path === '/virtual-seminar') {
         setCurrentPage('virtual-seminar')
+      } else if (path === '/seminar-selection') {
+        setCurrentPage('seminar-selection')
       } else if (path === '/user-profile') {
         const statePage = e?.state?.page
         setCurrentPage(user ? (statePage === 'user-tasks' ? 'user-tasks' : 'dashboard') : 'login')
@@ -319,6 +339,19 @@ function App() {
       'user-monitor-used': <AdminPlaceholder title="যারা ব্যবহার করেছে" />,
       'user-monitor-partial': <AdminPlaceholder title="যারা আংশিক ব্যবহার করেছে" />,
       'plex-deployment': <PlexDeploymentFAQ />,
+      'asset-gallery': <AssetGallery />,
+      'quiz-add': <QuizAdd onTabChange={setAdminTab} />,
+      'quiz-list': <QuizList onTabChange={setAdminTab} />,
+      'poll-add': <PollAdd onTabChange={setAdminTab} />,
+      'poll-list': <PollList onTabChange={setAdminTab} />,
+      'video-add': <VideoAdd onTabChange={setAdminTab} />,
+      'video-list': <VideoList onTabChange={setAdminTab} />,
+      'audio-add': <AudioAdd onTabChange={setAdminTab} />,
+      'audio-list': <AudioList onTabChange={setAdminTab} />,
+      'timeline-add': <TimelineBuilder onTabChange={setAdminTab} />,
+      'timeline-list': <TimelineList onTabChange={setAdminTab} />,
+      'virtual-seminar': <VirtualSeminarManagement onTabChange={setAdminTab} />,
+      'roles-permissions': <RoleManagement />,
       settings: <Settings />,
     }
     return (
@@ -406,6 +439,26 @@ function App() {
         headerSettings={headerSettings}
         footerItems={footerItems}
         onNavigate={handleDashboardNavigate}
+      />
+    )
+  }
+
+  // Seminar selection page (grid of seminars)
+  if (currentPage === 'seminar-selection') {
+    return (
+      <SeminarSelection
+        onBack={() => {
+          setCurrentPage('home')
+          window.history.pushState(null, '', '/')
+        }}
+        headerSettings={headerSettings}
+        user={user}
+        onNavigateToLogin={() => setCurrentPage('login')}
+        onNavigateToRegister={() => setCurrentPage('register')}
+        onNavigateToProfile={() => {
+          window.history.pushState({}, '', '/user-profile')
+          setCurrentPage('dashboard')
+        }}
       />
     )
   }
@@ -571,8 +624,8 @@ function App() {
         <button
           className="video-editor-btn"
           onClick={() => {
-            setCurrentPage('virtual-seminar')
-            window.history.pushState(null, '', '/virtual-seminar')
+            setCurrentPage('seminar-selection')
+            window.history.pushState(null, '', '/seminar-selection')
           }}
         >
           সেমিনারে যান

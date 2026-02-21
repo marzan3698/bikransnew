@@ -1,0 +1,143 @@
+.quiz-add-page {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.quiz-add-page .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.quiz-add-page .page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.quiz-add-error {
+  background: rgba(248, 81, 73, 0.15);
+  border: 1px solid #f85149;
+  color: #f85149;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.quiz-add-form {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.quiz-add-form .mcq-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.quiz-add-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.quiz-add-form .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.quiz-add-form .form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #c9d1d9;
+  margin-bottom: 0.5rem;
+}
+
+.quiz-add-form .form-group input,
+.quiz-add-form .form-group textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  color: #c9d1d9;
+  font-size: 0.95rem;
+}
+
+.quiz-add-form .form-group input::placeholder,
+.quiz-add-form .form-group textarea::placeholder {
+  color: #6e7681;
+}
+
+.quiz-add-form .form-group input:focus,
+.quiz-add-form .form-group textarea:focus {
+  outline: none;
+  border-color: #58a6ff;
+}
+
+.quiz-add-form .form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.quiz-add-form .options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.quiz-add-form .answer-select select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  color: #c9d1d9;
+  font-size: 0.95rem;
+}
+
+.quiz-add-form .form-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.quiz-add-form .btn-primary {
+  background: #238636;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.quiz-add-form .btn-primary:hover:not(:disabled) {
+  background: #2ea043;
+}
+
+.quiz-add-form .btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.quiz-add-form .btn-secondary {
+  background: #21262d;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.quiz-add-form .btn-secondary:hover {
+  background: #30363d;
+}

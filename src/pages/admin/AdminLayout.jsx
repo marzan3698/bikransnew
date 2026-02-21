@@ -7,6 +7,7 @@ const DEFAULT_ADMIN_BG_VIDEO_ID = 'mfoRx20c7Us'
 function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
   const [isDesktop, setIsDesktop] = useState(true)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [timelineAddSidebarOpen, setTimelineAddSidebarOpen] = useState(false)
   const [openDropdownId, setOpenDropdownId] = useState(null) // 'theme-design' | 'video-editor' | null
   const [adminBgVideoId, setAdminBgVideoId] = useState(DEFAULT_ADMIN_BG_VIDEO_ID)
 
@@ -74,7 +75,35 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
         { id: 'user-monitor-partial', label: 'যারা আংশিক ব্যবহার করেছে', icon: 'users' },
       ],
     },
+    {
+      id: 'presentation-management',
+      label: 'প্রেজেন্টেশন ম্যানেজমেন্ট',
+      icon: 'presentation',
+      permissionSlug: 'presentation-management',
+      children: [
+        { id: 'presentation-asset', label: 'অ্যাসেট', isSectionHeader: true },
+        { id: 'asset-gallery', label: 'অ্যাসেট গ্যালারি', icon: 'gallery' },
+        { id: 'presentation-quiz', label: 'কুইজ', isSectionHeader: true },
+        { id: 'quiz-add', label: 'নতুন কুইজ অ্যাড', icon: 'add' },
+        { id: 'quiz-list', label: 'সকল কুইজ', icon: 'list' },
+        { id: 'presentation-poll', label: 'পোলিং', isSectionHeader: true },
+        { id: 'poll-add', label: 'নতুন পোলিং অ্যাড', icon: 'add' },
+        { id: 'poll-list', label: 'সকল পোলিং', icon: 'list' },
+        { id: 'presentation-video', label: 'ভিডিও (এক্সটার্নাল)', isSectionHeader: true },
+        { id: 'video-add', label: 'নতুন ভিডিও অ্যাড', icon: 'add' },
+        { id: 'video-list', label: 'সকল ভিডিও তালিকা', icon: 'list' },
+        { id: 'presentation-audio', label: 'অডিও ম্যানেজমেন্ট', isSectionHeader: true },
+        { id: 'audio-add', label: 'নতুন অডিও অ্যাড', icon: 'add' },
+        { id: 'audio-list', label: 'সকল অডিও তালিকা', icon: 'list' },
+        { id: 'presentation-timeline', label: 'টাইমলাইন', isSectionHeader: true },
+        { id: 'timeline-add', label: 'নতুন টাইমলাইন অ্যাড', icon: 'add' },
+        { id: 'timeline-list', label: 'সকল টাইমলাইন', icon: 'list' },
+        { id: 'presentation-seminar', label: 'Virtual Seminar', isSectionHeader: true },
+        { id: 'virtual-seminar', label: 'সেমিনার ম্যানেজমেন্ট', icon: 'video' },
+      ],
+    },
     { id: 'plex-deployment', label: 'Plex Auto Deployment', icon: 'deploy' },
+    { id: 'roles-permissions', label: 'রোল ও পারমিশন', icon: 'roles', adminOnly: true },
     { id: 'settings', label: 'Settings', icon: 'settings' },
   ]
 
@@ -186,6 +215,31 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
           <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
         </svg>
       ),
+      presentation: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect x="2" y="3" width="20" height="14" rx="2" />
+          <path d="M8 21h8M12 17v4" />
+        </svg>
+      ),
+      gallery: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect x="3" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="3" width="7" height="7" rx="1" />
+          <rect x="3" y="14" width="7" height="7" rx="1" />
+          <rect x="14" y="14" width="7" height="7" rx="1" />
+        </svg>
+      ),
+      add: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+      ),
+      roles: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2zm10-10V7a4 4 0 0 0-8 0v4h8z" />
+        </svg>
+      ),
       settings: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="12" cy="12" r="3" />
@@ -203,9 +257,27 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
     return icons[iconType] || null
   }
 
+  const isTimelineAdd = activeTab === 'timeline-add'
+  const sidebarHidden = isTimelineAdd && !timelineAddSidebarOpen
+
   return (
     <div className="admin-layout">
-      <aside className={`admin-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
+      {sidebarHidden && (
+        <button
+          type="button"
+          className="admin-sidebar-toggle-indicator"
+          onClick={() => setTimelineAddSidebarOpen(true)}
+          aria-label="সাইডবার দেখুন"
+          title="সাইডবার দেখুন"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+      )}
+      <aside className={`admin-sidebar ${sidebarCollapsed ? 'collapsed' : ''} ${sidebarHidden ? 'sidebar-auto-hidden' : ''}`}>
         <div className="sidebar-header">
           <div className="sidebar-brand">
             <div className="brand-icon">
@@ -217,8 +289,8 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
           </div>
           <button
             className="sidebar-toggle"
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            onClick={() => (isTimelineAdd ? setTimelineAddSidebarOpen(false) : setSidebarCollapsed(!sidebarCollapsed))}
+            aria-label={isTimelineAdd ? 'সাইডবার লুকান' : (sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar')}
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               {sidebarCollapsed ? (
@@ -231,7 +303,19 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
         </div>
         <nav className="sidebar-nav" aria-label="Admin menu">
           <ul className="sidebar-nav-list">
-            {navItems.map((item) => {
+            {navItems.filter((item) => {
+              const perms = user?.permissions || []
+              if (item.adminOnly && user?.role !== 'admin') return false
+              if (item.id === 'roles-permissions') return user?.role === 'admin' || perms.includes('roles-permissions')
+              if (item.permissionSlug) return user?.role === 'admin' || perms.includes(item.permissionSlug)
+              if (item.children) {
+                const permSlug = item.permissionSlug || item.id
+                const hasAnyChild = item.children.some((c) => !c.isSectionHeader)
+                const hasAccess = user?.role === 'admin' || perms.includes(permSlug)
+                return hasAnyChild && hasAccess
+              }
+              return user?.role === 'admin' || perms.includes(item.id)
+            }).map((item) => {
               if (item.children) {
                 const hasActive = item.children.some((c) => !c.isSectionHeader && c.id === activeTab)
                 const isOpen = (openDropdownId === item.id || hasActive) && !sidebarCollapsed
@@ -255,7 +339,12 @@ function AdminLayout({ children, user, onLogout, activeTab, onTabChange }) {
                       )}
                     </button>
                     <ul className={`nav-dropdown-list ${isOpen ? 'open' : ''}`}>
-                      {item.children.map((child) =>
+                      {item.children.filter((child) => {
+                        if (child.isSectionHeader) return true
+                        const perms = user?.permissions || []
+                        if (item.permissionSlug) return user?.role === 'admin' || perms.includes(item.permissionSlug)
+                        return user?.role === 'admin' || perms.includes(child.id)
+                      }).map((child) =>
                         child.isSectionHeader ? (
                           <li key={child.id} className="nav-section-header">
                             {!sidebarCollapsed && <span className="nav-section-label">{child.label}</span>}
