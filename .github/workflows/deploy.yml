@@ -20,5 +20,6 @@ jobs:
             set -e
             cd ${{ secrets.DEPLOY_PATH }}
             git pull origin main
+            npm install
             npm run build
             (npx pm2 restart bikrans --update-env 2>/dev/null || npx pm2 start server/index.js --name bikrans) && npx pm2 save 2>/dev/null || true

@@ -8,6 +8,7 @@ function PlexDeploymentFAQ() {
   const [pm2NohupWidgetOpen, setPm2NohupWidgetOpen] = useState(false)
   const [githubPushPullWidgetOpen, setGithubPushPullWidgetOpen] = useState(false)
   const [githubActionsWidgetOpen, setGithubActionsWidgetOpen] = useState(false)
+  const [troubleshootUpdatesWidgetOpen, setTroubleshootUpdatesWidgetOpen] = useState(false)
 
   const toggle = (step) => setExpanded((p) => ({ ...p, [step]: !p[step] }))
 
@@ -202,6 +203,55 @@ function PlexDeploymentFAQ() {
                   <code># অথবা</code>
                   <code>cd /var/www/vhosts/bikrans.com/httpdocs</code>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="plex-widget plex-troubleshoot-updates-widget">
+        <button
+          type="button"
+          className="plex-widget-toggle"
+          onClick={() => setTroubleshootUpdatesWidgetOpen(!troubleshootUpdatesWidgetOpen)}
+        >
+          <span className="plex-widget-icon">🔧</span>
+          <span className="plex-widget-title">Pull/Deploy করেছি কিন্তু নতুন আপডেট দেখা যাচ্ছে না</span>
+          <span className={`plex-widget-chevron ${troubleshootUpdatesWidgetOpen ? 'open' : ''}`}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points={troubleshootUpdatesWidgetOpen ? '6 15 12 9 18 15' : '6 9 12 15 18 9'} />
+            </svg>
+          </span>
+        </button>
+        {troubleshootUpdatesWidgetOpen && (
+          <div className="plex-widget-body">
+            <p>লাইভ সাইট <strong>dist/</strong> ফোল্ডার থেকে serve হয়। Pull শুধু সোর্স কোড আপডেট করে—<strong>dist/ আপডেট হয় না</strong> যদি Build না চালান।</p>
+
+            <h4>সমাধান ১: Build চালান (সবচেয়ে সাধারণ কারণ)</h4>
+            <p>Plesk-এ Pull করার পর অবশ্যই SSH দিয়ে Build চালান:</p>
+            <div className="plex-code-block">
+              <code>cd ~/httpdocs</code>
+              <code># অথবা: cd /var/www/vhosts/bikrans.com/httpdocs</code>
+              <code>npm run build</code>
+            </div>
+
+            <h4>সমাধান ২: Deploy command চেক করুন</h4>
+            <p>Plesk Git → <strong>Enable additional deployment actions</strong> চেক করা আছে কিনা দেখুন। চেক থাকলে Deploy ক্লিক করলেই build + restart অটো চালবে। যদি না থাকে, উপরের কমান্ড ম্যানুয়ালি চালান।</p>
+
+            <h4>সমাধান ৩: Node অ্যাপ রিস্টার্ট</h4>
+            <p>ব্যাকএন্ড বা API পরিবর্তন হলে PM2 রিস্টার্ট করুন:</p>
+            <div className="plex-code-block">
+              <code>(npx pm2 restart bikrans --update-env 2&gt;/dev/null || npx pm2 start server/index.js --name bikrans) &amp;&amp; npx pm2 save 2&gt;/dev/null || true</code>
+            </div>
+
+            <h4>সমাধান ৪: ব্রাউজার ক্যাশে</h4>
+            <p>Hard refresh করুন: <strong>Ctrl+Shift+R</strong> (Windows) বা <strong>Cmd+Shift+R</strong> (Mac)। অথবা ইঙ্কগনিটো/প্রাইভেট উইন্ডোতে চেক করুন।</p>
+
+            <div className="plex-tip plex-tip-warning" style={{ marginTop: '1rem' }}>
+              <span className="plex-tip-icon">📌</span>
+              <div>
+                <p className="plex-tip-title">সারাংশ</p>
+                <p><strong>Pull → Build → Restart</strong> — তিনটিই করা জরুরি। শুধু Pull যথেষ্ট নয়।</p>
               </div>
             </div>
           </div>
